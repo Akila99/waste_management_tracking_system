@@ -1,6 +1,6 @@
 {
-    "name": "waste_management_tracking_system",
-    "short_name": "waste_management_tracking_system",
+    "name": "waste_management_tracking",
+    "short_name": "waste_management_tracking",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
