@@ -52,7 +52,7 @@ Center(
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.gps_fixed), label: 'Track'),
           BottomNavigationBarItem(icon: Icon(Icons.schedule), label: 'Schedule'),
-          BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: 'Moree'),
+          BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: 'More'),
       ]),
     );
   }
