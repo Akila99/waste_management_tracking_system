@@ -43,6 +43,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
     - map_theme/retro_theme.json
     - assets/
+    - assets/images/

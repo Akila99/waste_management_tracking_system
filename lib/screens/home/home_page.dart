@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:waste_management_tracking/services/auth_service.dart';
 import 'package:waste_management_tracking/screens/auth/sign_in_page.dart';
 import 'package:waste_management_tracking/screens/map/area_selector.dart';
+import 'package:waste_management_tracking/screens/home/home_content.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -74,6 +75,7 @@ class _HomePageState extends State<HomePage> {
     final user = _authService.currentUser;
 
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: const Text('Waste Management'),
         backgroundColor: Colors.lightGreen,
@@ -99,38 +101,52 @@ class _HomePageState extends State<HomePage> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          _buildHomeContent(),
+          HomeContent(),
           const TrackingScreen(),
           const ScheduleScreen(),
           const MoreScreen(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        decoration: BoxDecoration(
+          color: Colors.green.withOpacity(0.8),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _currentIndex,
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.white70,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.gps_fixed),
+                label: 'Tracking',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.schedule),
+                label: 'Schedule',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.more_horiz),
+                label: 'More',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.gps_fixed),
-            label: 'Tracking',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.schedule),
-            label: 'Schedule',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz),
-            label: 'More',
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -206,52 +222,6 @@ class _HomePageState extends State<HomePage> {
                 setState(() {});
               }
             },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHomeContent() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Card(
-            child: ListTile(
-              leading: const Icon(Icons.location_on),
-              title: const Text('Track Waste Collection'),
-              subtitle: const Text('View real-time tracking'),
-              onTap: () {
-                setState(() {
-                  _currentIndex = 1; // Switch to tracking tab
-                });
-              },
-            ),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Recent Updates',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Card(
-            child: ListTile(
-              title: const Text('New Feature Added'),
-              subtitle: const Text('Real-time waste collection tracking is now available'),
-              trailing: const Icon(Icons.new_releases),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: const Text('System Update'),
-              subtitle: const Text('Performance improvements and bug fixes'),
-              trailing: const Icon(Icons.system_update),
-            ),
           ),
         ],
       ),
