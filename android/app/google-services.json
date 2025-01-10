@@ -1,51 +1,45 @@
 {
   "project_info": {
-    "project_number": "190720782773",
-    "project_id": "waste-management-tracking",
-    "storage_bucket": "waste-management-tracking.firebasestorage.app"
+    "project_number": "292559066781",
+    "project_id": "waste-management-project-fa040",
+    "storage_bucket": "waste-management-project-fa040.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:190720782773:android:676197f7ace9242d69a9fc",
+        "mobilesdk_app_id": "1:292559066781:android:98050761af7dd0650d2674",
         "android_client_info": {
-          "package_name": "com.example.waste_management_tracking"
+          "package_name": "com.example.google_maps_in_flutter"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "190720782773-36onno6opb27f5aqeo9ble148dk1id0h.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.waste_management_tracking",
-            "certificate_hash": "58d6980e2a07c9d3712fef3ecba6cd6906293ccd"
-          }
-        },
-        {
-          "client_id": "190720782773-nremh663l4uc7lqcnrclauj2fr5393k0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB_emhdfAJ4jbK6hLMH1vpr6R9oyH7Dn_E"
+          "current_key": "AIzaSyBbsSHZjAU3ra4QIkE6a1mboeWRj7Kq6KM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "190720782773-nremh663l4uc7lqcnrclauj2fr5393k0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "190720782773-c1efj03auuki35crq5t88dhh5p141g7o.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.wastet"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292559066781:android:41183651be8228eb0d2674",
+        "android_client_info": {
+          "package_name": "com.example.waste_management_tracking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbsSHZjAU3ra4QIkE6a1mboeWRj7Kq6KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
         }
       }
     }

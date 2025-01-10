@@ -41,46 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBK2MtXpwxKdwUvbONouh4ZmsJmSV3J8sY',
-    appId: '1:190720782773:web:eb71e2a6c4dbf5f869a9fc',
-    messagingSenderId: '190720782773',
-    projectId: 'waste-management-tracking',
-    authDomain: 'waste-management-tracking.firebaseapp.com',
-    storageBucket: 'waste-management-tracking.firebasestorage.app',
+    apiKey: 'AIzaSyAWszsgHqTvgoYd_3INUbx98UHXlBCiMfI',
+    appId: '1:292559066781:web:6cac4ed9e66d88b40d2674',
+    messagingSenderId: '292559066781',
+    projectId: 'waste-management-project-fa040',
+    authDomain: 'waste-management-project-fa040.firebaseapp.com',
+    storageBucket: 'waste-management-project-fa040.firebasestorage.app',
+    measurementId: 'G-880J4FM6K0',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB_emhdfAJ4jbK6hLMH1vpr6R9oyH7Dn_E',
-    appId: '1:190720782773:android:676197f7ace9242d69a9fc',
-    messagingSenderId: '190720782773',
-    projectId: 'waste-management-tracking',
-    storageBucket: 'waste-management-tracking.firebasestorage.app',
+    apiKey: 'AIzaSyBbsSHZjAU3ra4QIkE6a1mboeWRj7Kq6KM',
+    appId: '1:292559066781:android:41183651be8228eb0d2674',
+    messagingSenderId: '292559066781',
+    projectId: 'waste-management-project-fa040',
+    storageBucket: 'waste-management-project-fa040.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAnLRjIVOYGGt1N5nU99ztC_VlLskVcxoc',
-    appId: '1:190720782773:ios:bbd845987a47ad3669a9fc',
-    messagingSenderId: '190720782773',
-    projectId: 'waste-management-tracking',
-    storageBucket: 'waste-management-tracking.firebasestorage.app',
+    apiKey: 'AIzaSyCnn8xGaK5hEipVw165W389G7iG1Aj2xEY',
+    appId: '1:292559066781:ios:1308345171c84fe30d2674',
+    messagingSenderId: '292559066781',
+    projectId: 'waste-management-project-fa040',
+    storageBucket: 'waste-management-project-fa040.firebasestorage.app',
     iosBundleId: 'com.example.wastet',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAnLRjIVOYGGt1N5nU99ztC_VlLskVcxoc',
-    appId: '1:190720782773:ios:bbd845987a47ad3669a9fc',
-    messagingSenderId: '190720782773',
-    projectId: 'waste-management-tracking',
-    storageBucket: 'waste-management-tracking.firebasestorage.app',
+    apiKey: 'AIzaSyCnn8xGaK5hEipVw165W389G7iG1Aj2xEY',
+    appId: '1:292559066781:ios:1308345171c84fe30d2674',
+    messagingSenderId: '292559066781',
+    projectId: 'waste-management-project-fa040',
+    storageBucket: 'waste-management-project-fa040.firebasestorage.app',
     iosBundleId: 'com.example.wastet',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBK2MtXpwxKdwUvbONouh4ZmsJmSV3J8sY',
-    appId: '1:190720782773:web:fd27f4e1fde3559169a9fc',
-    messagingSenderId: '190720782773',
-    projectId: 'waste-management-tracking',
-    authDomain: 'waste-management-tracking.firebaseapp.com',
-    storageBucket: 'waste-management-tracking.firebasestorage.app',
+    apiKey: 'AIzaSyAWszsgHqTvgoYd_3INUbx98UHXlBCiMfI',
+    appId: '1:292559066781:web:4e430aba2bf8bc050d2674',
+    messagingSenderId: '292559066781',
+    projectId: 'waste-management-project-fa040',
+    authDomain: 'waste-management-project-fa040.firebaseapp.com',
+    storageBucket: 'waste-management-project-fa040.firebasestorage.app',
+    measurementId: 'G-L15YH85YBN',
   );
+
 }
