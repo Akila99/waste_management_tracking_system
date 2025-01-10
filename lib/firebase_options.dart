@@ -31,7 +31,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
-              'you can reconfigure this by running the FlutterFire CLI again.',
+          'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
         throw UnsupportedError(
@@ -42,12 +42,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAWszsgHqTvgoYd_3INUbx98UHXlBCiMfI',
-    appId: '1:292559066781:web:6cac4ed9e66d88b40d2674',
+    appId: '1:292559066781:web:4e430aba2bf8bc050d2674',
     messagingSenderId: '292559066781',
     projectId: 'waste-management-project-fa040',
     authDomain: 'waste-management-project-fa040.firebaseapp.com',
     storageBucket: 'waste-management-project-fa040.firebasestorage.app',
-    measurementId: 'G-880J4FM6K0',
+    measurementId: 'G-L15YH85YBN',
   );
 
   static const FirebaseOptions android = FirebaseOptions(

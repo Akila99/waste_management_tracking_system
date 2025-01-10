@@ -44,5 +44,5 @@ flutter:
 
   assets:
     - map_theme/retro_theme.json
-    - assets/
-    - assets/images/
+
+
