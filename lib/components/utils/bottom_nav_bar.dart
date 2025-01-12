@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 
 class MyBottomNavBar extends StatelessWidget {
-  final void Function(int)? onTabTapped;
+  final void Function(int) onTabTapped;
   final int currentIndex;
 
-  MyBottomNavBar({
-    Key? key,
+  const MyBottomNavBar({
+    super.key,
     required this.onTabTapped,
     required this.currentIndex,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      decoration: BoxDecoration(
+        color: Colors.green.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(30),
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.transparent,
           elevation: 0,
-          currentIndex: currentIndex, // Use the passed parameter
-          onTap: onTabTapped, // Use the passed callback
+          currentIndex: currentIndex,
+          onTap: onTabTapped,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.white70,
           items: const <BottomNavigationBarItem>[

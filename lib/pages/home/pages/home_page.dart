@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 
 class HomeContent extends StatelessWidget {
   final List<Map<String, String>> tabs = [
-    {'title': 'Home Trash Pickup', 'description': 'We handle all your home trash needs.', 'icon': 'assets/homee.png'},
-    {'title': 'Business Trash Pickup', 'description': 'Efficient waste solutions for businesses.', 'icon': 'assets/business.png'},
-    {'title': 'Construction Waste Pickup', 'description': 'Reliable disposal for construction sites.', 'icon': 'assets/construction.png'},
-    {'title': 'Recycling Services', 'description': 'Recycle effectively with our services.', 'icon': 'assets/recycle.png'},
-    {'title': 'Special Waste Pickup', 'description': 'Handling special and hazardous waste.', 'icon': 'assets/special.png'},
-    {'title': 'Bulk Pickup', 'description': 'Convenient solutions for bulk waste.', 'icon': 'assets/bulk.png'},
+    {'title': 'Home Trash Pickup', 'description': 'We handle all your home trash needs.', 'icon': 'assets/images/home.png'},
+    {'title': 'Business Trash Pickup', 'description': 'Efficient waste solutions for businesses.', 'icon': 'assets/images/business.png'},
+    {'title': 'Construction Waste Pickup', 'description': 'Reliable disposal for construction sites.', 'icon': 'assets/images/construction.png'},
+    {'title': 'Recycling Services', 'description': 'Recycle effectively with our services.', 'icon': 'assets/images/recycle.png'},
+    {'title': 'Special Waste Pickup', 'description': 'Handling special and hazardous waste.', 'icon': 'assets/images/special.png'},
+    {'title': 'Bulk Pickup', 'description': 'Convenient solutions for bulk waste.', 'icon': 'assets/images/bulk.png'},
   ];
 
   final List<Map<String, String>> adTabs = [
-    {'image': 'assets/ad1.jpg', 'title': 'Special Offer 1'},
-    {'image': 'assets/ad2.jpg', 'title': 'Special Offer 2'},
-    {'image': 'assets/ad3.jpg', 'title': 'Special Offer 3'},
-    {'image': 'assets/stable.jpg', 'title': 'Special Offer 4'},
+    {'image': 'assets/images/ad1.jpg', 'title': 'Special Offer 1'},
+    {'image': 'assets/images/ad2.jpg', 'title': 'Special Offer 2'},
+    {'image': 'assets/images/ad3.jpg', 'title': 'Special Offer 3'},
+    {'image': 'assets/images/stable.jpg', 'title': 'Special Offer 4'},
   ];
 
   @override

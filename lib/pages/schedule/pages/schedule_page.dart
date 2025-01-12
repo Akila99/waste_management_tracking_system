@@ -18,31 +18,44 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.lightGreen,
-        title: Align(alignment: Alignment.centerLeft,
-            child: const Text(
-              "Schedule",
-              style: TextStyle(fontSize: 20),
-            )
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // Align everything to the left
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: const Text(
-                  "You can check your schedule here. Based on the area you live, we provide a detailed schedule and a route map for authorized users!📅",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-                ),
-              ),
-              const SizedBox(height: 20), // Add some spacing before the dropdowns
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+             padding: const EdgeInsets.all(10.0),
+             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+               // Top-left "Schedule" heading
+               Text(
+                 "Schedule",
+                 style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                  ),
+               ),
+              const SizedBox(height: 16),
 
-              // Province Dropdown with Prompt
+                // Green outlined box with text
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.green, width: 2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Text(
+                    "You can check your schedule here. Based on the area you live, we provide a detailed schedule and a route map for authorized users! 📅",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+              // Province Dropdown
               const Text("Select your province:", style: TextStyle(fontSize: 14)),
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance.collection("province").snapshots(),
@@ -241,7 +254,8 @@ class _SchedulePageState extends State<SchedulePage> {
               ],
             ],
           ),
-        ),
+          ),
+        )
       ),
     );
   }
