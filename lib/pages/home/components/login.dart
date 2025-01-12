@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/driver/driver_signin.dart';
+import '../../../components/driver/driver_dashboard.dart';
 import '../../../components/user/sign_in_page.dart';
 
 class LoginSelectionScreen extends StatelessWidget {
@@ -9,6 +9,15 @@ class LoginSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Log In'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       backgroundColor: const Color(0xFFE8F5E9),
       body: Stack(
         children: [

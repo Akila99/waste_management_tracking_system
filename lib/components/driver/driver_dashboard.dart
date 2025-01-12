@@ -110,7 +110,7 @@ class DriverDashboardScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () {
-                          // End trip logic
+                          _showEndTripConfirmationDialog(context);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -153,5 +153,42 @@ class DriverDashboardScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _showEndTripConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('End Trip'),
+          content: const Text('Are you sure you want to end this trip?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // End trip logic
+                Navigator.of(context).pop(); // Close the dialog
+                _endTrip(context);
+              },
+              child: const Text(
+                'End Trip',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _endTrip(BuildContext context) {
+    // Navigate back to the sign in page (e.g., using Navigator.pop)
+    Navigator.pop(context); // This will pop the current screen and navigate back to the sign in page
   }
 }
