@@ -66,6 +66,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
         );
       }
     } catch (e) {
+      print('Sign in error: $e');
       _showErrorDialog(e.toString());
     } finally {
       if (mounted) setState(() => _isLoading = false);

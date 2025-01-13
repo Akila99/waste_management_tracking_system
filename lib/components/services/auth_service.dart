@@ -8,7 +8,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: '292559066781-1s0g14fha7tlvjo23a05bci5e7uu57k5.apps.googleusercontent.com',
+  );
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   // Stream to monitor auth state changes
@@ -42,54 +44,49 @@ class AuthService {
   // Sign in with Google
   Future<User?> signInWithGoogle() async {
     try {
-      // Show loading state
-      // Begin the interactive sign-in process
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      // Clear any previous sign in
+      await _googleSignIn.signOut();
 
-      // User cancelled the sign-in
+      // Begin interactive sign in process
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return null;
 
-      try {
-        // Obtain auth details from request
-        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      print('Google Sign In successful for ${googleUser.email}'); // Debug log
 
-        // Create a new credential for Firebase
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
+      // Obtain auth details from request
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-        // Sign in to Firebase with the Google credential
-        final UserCredential userCredential =
-        await _auth.signInWithCredential(credential);
+      // Create credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-        // After successful sign in, update user data
-        if (userCredential.user != null) {
-          await _firestore.collection('users').doc(userCredential.user!.uid).set({
-            'name': userCredential.user!.displayName,
-            'email': userCredential.user!.email,
-            'photoURL': userCredential.user!.photoURL,
-            'lastLogin': FieldValue.serverTimestamp(),
-            'loginMethod': 'google',
-          }, SetOptions(merge: true));
-        }
+      // Sign in to Firebase with credential
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
 
-        return userCredential.user;
-      } catch (e) {
-        // Handle specific Google Sign-In errors
-        print('Error during Google Sign In authentication: $e');
-        throw 'Failed to authenticate with Google. Please try again.';
+      print('Firebase Sign In successful'); // Debug log
+
+      // Create/update user document in Firestore
+      if (userCredential.user != null) {
+        await _firestore.collection('users').doc(userCredential.user!.uid).set({
+          'name': userCredential.user!.displayName,
+          'email': userCredential.user!.email,
+          'photoURL': userCredential.user!.photoURL,
+          'lastLogin': FieldValue.serverTimestamp(),
+          'loginMethod': 'google',
+        }, SetOptions(merge: true));
       }
-    } on PlatformException catch (e) {
-      print('Platform Exception during Google Sign In: $e');
-      if (e.code == 'sign_in_failed') {
-        throw 'Google Sign In was cancelled or failed. Please try again.';
-      } else {
-        throw 'An error occurred during Google Sign In. Please try again.';
-      }
+
+      return userCredential.user;
     } catch (e) {
-      print('Unexpected error during Google Sign In: $e');
-      throw 'An unexpected error occurred. Please try again.';
+      print('Error during Google Sign In: $e'); // Debug log
+      if (e is PlatformException) {
+        if (e.code == 'sign_in_canceled') {
+          throw 'Sign in was canceled';
+        }
+      }
+      throw 'Failed to sign in with Google: ${e.toString()}';
     }
   }
 

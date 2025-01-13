@@ -11,22 +11,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
-    options:
-      kIsWeb
-        ? const FirebaseOptions(
-        apiKey: "AIzaSyBK2MtXpwxKdwUvbONouh4ZmsJmSV3J8sY",
-        authDomain: "waste-management-tracking.firebaseapp.com",
-        projectId: "waste-management-tracking",
-        storageBucket: "waste-management-tracking.firebasestorage.app",
-        messagingSenderId: "190720782773",
-        appId: "1:190720782773:web:eb71e2a6c4dbf5f869a9fc"
-    ):
-      DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 
   try {
     await FirebaseAppCheck.instance.activate(
-      webProvider: ReCaptchaV3Provider('6LcwTqAqAAAAAGIp8vmwn6-GLtdsoiegdzlgdkGZ'),
+      // Update this recaptcha key with your friend's key
+      webProvider: ReCaptchaV3Provider('6LeXXLUqAAAAAAoEMdZjKT0Ub1xbZFcEHK184d9m'),
       androidProvider: kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
       appleProvider: AppleProvider.appAttest,
     );
