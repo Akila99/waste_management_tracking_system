@@ -1,29 +1,11 @@
 {
   "project_info": {
     "project_number": "292559066781",
+    "firebase_url": "https://waste-management-project-fa040-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "waste-management-project-fa040",
     "storage_bucket": "waste-management-project-fa040.firebasestorage.app"
   },
   "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:292559066781:android:98050761af7dd0650d2674",
-        "android_client_info": {
-          "package_name": "com.example.google_maps_in_flutter"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBbsSHZjAU3ra4QIkE6a1mboeWRj7Kq6KM"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:292559066781:android:41183651be8228eb0d2674",
@@ -31,7 +13,20 @@
           "package_name": "com.example.waste_management_tracking"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "292559066781-afu2u9uq294fv9gefmg9u78svjp1huv1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.waste_management_tracking",
+            "certificate_hash": "6f65bf4ce685882e6e74eb056909494aa437f077"
+          }
+        },
+        {
+          "client_id": "292559066781-1s0g14fha7tlvjo23a05bci5e7uu57k5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBbsSHZjAU3ra4QIkE6a1mboeWRj7Kq6KM"
@@ -39,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292559066781-1s0g14fha7tlvjo23a05bci5e7uu57k5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

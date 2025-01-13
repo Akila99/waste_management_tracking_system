@@ -7,21 +7,15 @@ import '../../tracking/pages/tracking_page.dart';
 import '../pages/home_page.dart';
 import 'login.dart';
 
-
-
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-
-  void navigateBottomBar(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 
   final List<Widget> _screens = [
     HomeContent(),
@@ -92,16 +86,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: MyBottomNavBar(
-          onTabTapped: _onTabTapped,
-          currentIndex: _currentIndex
-      ),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.green[500],
-        title: Text('Hello! User'),
+        title: const Text('Hello! User'),
         actions: [
           IconButton(
-            icon: Icon(Icons.account_circle, size: 30),
+            icon: const Icon(Icons.account_circle, size: 30),
             onPressed: _showProfileDialog,
           ),
         ],
@@ -146,7 +137,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: _screens[_currentIndex],
-      extendBody: true,
+      bottomNavigationBar: MyBottomNavBar(
+        onTabTapped: _onTabTapped,
+        currentIndex: _currentIndex,
+      ),
     );
   }
 }

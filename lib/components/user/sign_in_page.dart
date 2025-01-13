@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../pages/home/pages/home_page.dart';
+import '../../pages/home/components/home_drawer.dart';
 import '../services/auth_service.dart';
 import '../utils/custom_button.dart';
 import '../utils/social_sign_in_button.dart';
@@ -61,7 +61,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
       if (user != null && mounted) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeContent()),
+          MaterialPageRoute(builder: (context) => HomeScreen()),
               (route) => false,
         );
       }
@@ -80,7 +80,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
       if (user != null && mounted) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeContent()),
+          MaterialPageRoute(builder: (context) => HomeScreen()),
               (route) => false,
         );
       }
@@ -94,17 +94,16 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
-      builder: (context) =>
-          AlertDialog(
-            title: const Text('Sign In Failed'),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Sign In Failed'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
           ),
+        ],
+      ),
     );
   }
 

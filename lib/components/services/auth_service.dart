@@ -9,7 +9,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: '292559066781-1s0g14fha7tlvjo23a05bci5e7uu57k5.apps.googleusercontent.com',
+    scopes: ['email', 'profile'],
   );
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
@@ -18,6 +18,19 @@ class AuthService {
 
   // Get current user
   User? get currentUser => _auth.currentUser;
+
+  // Check if user is logged in
+  bool get isUserLoggedIn => _auth.currentUser != null;
+
+  // Get user role
+  Future<String> getUserRole(String userId) async {
+    try {
+      DocumentSnapshot doc = await _firestore.collection('users').doc(userId).get();
+      return doc.get('role') as String? ?? 'user';
+    } catch (e) {
+      return 'user'; // Default role
+    }
+  }
 
   // Sign in with email and password
   Future<User?> signIn(String email, String password) async {
@@ -51,8 +64,6 @@ class AuthService {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return null;
 
-      print('Google Sign In successful for ${googleUser.email}'); // Debug log
-
       // Obtain auth details from request
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
@@ -65,8 +76,6 @@ class AuthService {
       // Sign in to Firebase with credential
       final UserCredential userCredential = await _auth.signInWithCredential(credential);
 
-      print('Firebase Sign In successful'); // Debug log
-
       // Create/update user document in Firestore
       if (userCredential.user != null) {
         await _firestore.collection('users').doc(userCredential.user!.uid).set({
@@ -75,12 +84,13 @@ class AuthService {
           'photoURL': userCredential.user!.photoURL,
           'lastLogin': FieldValue.serverTimestamp(),
           'loginMethod': 'google',
+          'role': 'user', // Default role for new users
+          'status': 'active',
         }, SetOptions(merge: true));
       }
 
       return userCredential.user;
     } catch (e) {
-      print('Error during Google Sign In: $e'); // Debug log
       if (e is PlatformException) {
         if (e.code == 'sign_in_canceled') {
           throw 'Sign in was canceled';
@@ -198,6 +208,25 @@ class AuthService {
       }
 
       await user.updatePassword(newPassword);
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthError(e);
+    }
+  }
+
+  // Delete account
+  Future<void> deleteAccount() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) throw 'No user logged in';
+
+      // Delete user data from Firestore
+      await _firestore.collection('users').doc(user.uid).delete();
+
+      // Delete user authentication
+      await user.delete();
+
+      // Clear local storage
+      await _secureStorage.deleteAll();
     } on FirebaseAuthException catch (e) {
       throw _handleAuthError(e);
     }
