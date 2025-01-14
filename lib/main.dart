@@ -12,7 +12,8 @@ void main() async {
 
   await Firebase.initializeApp(
     options:
-      kIsWeb
+    DefaultFirebaseOptions.currentPlatform,
+      /*kIsWeb
         ? const FirebaseOptions(
         apiKey: "AIzaSyBK2MtXpwxKdwUvbONouh4ZmsJmSV3J8sY",
         authDomain: "waste-management-tracking.firebaseapp.com",
@@ -20,8 +21,8 @@ void main() async {
         storageBucket: "waste-management-tracking.firebasestorage.app",
         messagingSenderId: "190720782773",
         appId: "1:190720782773:web:eb71e2a6c4dbf5f869a9fc"
-    ):
-      DefaultFirebaseOptions.currentPlatform,
+    ):*/
+
   );
 
   try {

@@ -122,7 +122,7 @@ class _SchedulePageState extends State<SchedulePage> {
                     final districts = snapshot.data?.docs ?? [];
                     if (districts.isEmpty) {
                       return const Center(
-                        child: Text("No districts found for this province"),
+                        child: Text("Under Construction. Coming soon!!"),
                       );
                     }
 
@@ -174,7 +174,7 @@ class _SchedulePageState extends State<SchedulePage> {
                     final councils = snapshot.data?.docs ?? [];
                     if (councils.isEmpty) {
                       return const Center(
-                        child: Text("No councils found for this district"),
+                        child: Text("Under Construction. Coming soon!!"),
                       );
                     }
 
@@ -227,7 +227,7 @@ class _SchedulePageState extends State<SchedulePage> {
                     final wards = snapshot.data?.docs ?? [];
                     if (wards.isEmpty) {
                       return const Center(
-                        child: Text("No wards found for this council"),
+                        child: Text("Under Construction. Coming soon!!"),
                       );
                     }
 

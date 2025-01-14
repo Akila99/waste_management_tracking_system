@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '292559066781',
     projectId: 'waste-management-project-fa040',
     authDomain: 'waste-management-project-fa040.firebaseapp.com',
+    databaseURL: 'https://waste-management-project-fa040-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'waste-management-project-fa040.firebasestorage.app',
     measurementId: 'G-L15YH85YBN',
   );
@@ -55,6 +56,7 @@ class DefaultFirebaseOptions {
     appId: '1:292559066781:android:41183651be8228eb0d2674',
     messagingSenderId: '292559066781',
     projectId: 'waste-management-project-fa040',
+    databaseURL: 'https://waste-management-project-fa040-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'waste-management-project-fa040.firebasestorage.app',
   );
 
@@ -63,7 +65,9 @@ class DefaultFirebaseOptions {
     appId: '1:292559066781:ios:1308345171c84fe30d2674',
     messagingSenderId: '292559066781',
     projectId: 'waste-management-project-fa040',
+    databaseURL: 'https://waste-management-project-fa040-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'waste-management-project-fa040.firebasestorage.app',
+    androidClientId: '292559066781-afu2u9uq294fv9gefmg9u78svjp1huv1.apps.googleusercontent.com',
     iosBundleId: 'com.example.wastet',
   );
 
@@ -72,7 +76,9 @@ class DefaultFirebaseOptions {
     appId: '1:292559066781:ios:1308345171c84fe30d2674',
     messagingSenderId: '292559066781',
     projectId: 'waste-management-project-fa040',
+    databaseURL: 'https://waste-management-project-fa040-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'waste-management-project-fa040.firebasestorage.app',
+    androidClientId: '292559066781-afu2u9uq294fv9gefmg9u78svjp1huv1.apps.googleusercontent.com',
     iosBundleId: 'com.example.wastet',
   );
 
@@ -82,6 +88,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '292559066781',
     projectId: 'waste-management-project-fa040',
     authDomain: 'waste-management-project-fa040.firebaseapp.com',
+    databaseURL: 'https://waste-management-project-fa040-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'waste-management-project-fa040.firebasestorage.app',
     measurementId: 'G-L15YH85YBN',
   );

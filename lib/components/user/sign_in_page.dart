@@ -111,7 +111,10 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign In'),
+        backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(
+          color: const Color(0xFF2E7D32),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
