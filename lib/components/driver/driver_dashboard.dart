@@ -12,7 +12,7 @@ class DriverDashboardScreen extends StatelessWidget {
           'Driver Dashboard',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(0xFF2E7D32),
+        backgroundColor: Colors.green[500],
         elevation: 0,
       ),
       body: Stack(
@@ -24,7 +24,7 @@ class DriverDashboardScreen extends StatelessWidget {
             right: 0,
             height: 150,
             child: Container(
-              color: const Color(0xFF2E7D32),
+              color: Colors.green[500],
             ),
           ),
           SafeArea(

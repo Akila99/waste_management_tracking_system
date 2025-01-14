@@ -10,6 +10,7 @@ class LoginSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         title: Text('Log In'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
