@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../components/home_drawer.dart';
 import 'package:waste_management_tracking/components/services/add_link.dart';
@@ -73,6 +72,7 @@ class HomeContent extends StatelessWidget {
             // Main Tabs Section
             Container(
               height: 500,
+              color: Colors.white,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -295,7 +295,7 @@ class HomeContent extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 80),
+            const SizedBox(height: 20), // Changed from 80 to 40 (50% reduction)
           ],
         ),
       ),
@@ -326,6 +326,7 @@ class HomeContent extends StatelessWidget {
       },
       child: Card(
         elevation: 4,
+        color: Colors.lightBlue[50],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
