@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import '../../../components/user/sign_up_page.dart';
 import '../../../components/utils/bottom_nav_bar.dart';
-import '../../../components/services/auth_service.dart'; // Add this import
+import '../../../components/services/auth_service.dart';
 import '../../more/pages/more_page.dart';
 import '../../schedule/pages/schedule_page.dart';
 import '../../tracking/pages/tracking_page.dart';
@@ -13,12 +13,12 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-  final AuthService _authService = AuthService(); // Add this
+  final AuthService _authService = AuthService();
 
   final List<Widget> _screens = [
     HomeContent(),
@@ -26,6 +26,12 @@ class _HomeScreenState extends State<HomeScreen> {
     SchedulePage(),
     MoreScreen(),
   ];
+
+  void navigateBottomBar(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -51,14 +57,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showProfileDialog() {
-    String name = _authService.currentUser?.displayName ?? "";
-    String email = _authService.currentUser?.email ?? "";
+    final user = _authService.currentUser;
+    String name = user?.displayName ?? '';
+    String email = user?.email ?? '';
+    String city = ""; // Added city variable
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Profile'),
+          title: const Text('Edit Profile'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -72,32 +80,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   name = value;
                 },
               ),
+              const SizedBox(height: 16),
               TextField(
                 decoration: InputDecoration(
                   labelText: 'City',
                   prefixIcon: Icon(Icons.location_city),
                 ),
                 onChanged: (value) {
-                  // Handle city input
+                  city = value;
                 },
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   // Handle profile picture editing
                 },
-                child: Text('Edit Profile Picture'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
+                child: const Text('Edit Profile Picture'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _signOut,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
-                child: Text('Sign Out'),
+                child: const Text('Sign Out'),
               ),
             ],
           ),
@@ -106,14 +117,15 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
                 // Save user info
+                // Here you would typically update the user profile with the new information
                 Navigator.of(context).pop();
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         );
@@ -123,7 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Get current user
     final user = _authService.currentUser;
 
     return Scaffold(
@@ -133,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(user != null ? 'Hello, ${user.displayName ?? "User"}!' : 'Hello! User'),
         actions: [
           IconButton(
-            icon: Icon(Icons.account_circle, size: 30),
+            icon: const Icon(Icons.account_circle, size: 30),
             onPressed: user != null ? _showProfileDialog : () {
               Navigator.push(
                 context,
@@ -200,6 +211,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 leading: Icon(Icons.person),
                 title: Text('Profile'),
                 onTap: _showProfileDialog,
+              ),
+              ListTile(
+                leading: Icon(Icons.notifications),
+                title: Text('Notifications'),
+                onTap: () {
+                  // Navigate to notifications
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+                onTap: () {
+                  // Navigate to settings
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.help),
+                title: Text('Help & Support'),
+                onTap: () {
+                  // Navigate to help
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.info),
+                title: Text('About Us'),
+                onTap: () {
+                  // Navigate to about page
+                },
               ),
               ListTile(
                 leading: Icon(Icons.logout),
