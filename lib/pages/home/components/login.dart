@@ -9,16 +9,6 @@ class LoginSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: Text('Log In'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
       backgroundColor: const Color(0xFFE8F5E9),
       body: Stack(
         children: [
@@ -50,37 +40,54 @@ class LoginSelectionScreen extends StatelessWidget {
           // Main Content
           SafeArea(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 60),
-                // App Logo - Changed to recycle icon
-                Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF2E7D32),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: const Icon(
-                    Icons.recycling,  // Changed from eco to recycling
-                    size: 60,
-                    color: Colors.white,
+                // Back Button
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: const Color(0xFF2E7D32),),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ),
                 const SizedBox(height: 40),
-                const Text(
-                  'Waste Management Tracking',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2E7D32),
+                // App Logo - Changed to recycle icon
+                Center(
+                  child: Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2E7D32),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Icon(
+                      Icons.recycling, // Changed from eco to recycling
+                      size: 60,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                const Center(
+                  child: Text(
+                    'Waste Management Tracking',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2E7D32),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Choose your account type',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey,
+                const Center(
+                  child: Text(
+                    'Choose your account type',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
                 const Spacer(),
@@ -185,4 +192,3 @@ class LoginSelectionScreen extends StatelessWidget {
     );
   }
 }
-

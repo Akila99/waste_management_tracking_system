@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class MoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -34,27 +33,12 @@ class MoreOption extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
         content: _getContent(context),
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         actions: [
-          if (label == 'Settings')
-            TextButton(
-              onPressed: () {
-                // Logout logic here
-                Navigator.of(context).pop();
-              },
-              child: Text('Logout'),
-            ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text('Close'),
           ),
-          if (label == 'Feedback')
-            TextButton(
-              onPressed: () {
-                // Logic to handle sending feedback
-                Navigator.of(context).pop();
-              },
-              child: Text('Send'),
-            ),
         ],
       ),
     );
@@ -63,8 +47,19 @@ class MoreOption extends StatelessWidget {
   Widget _getContent(BuildContext context) {
     switch (label) {
       case 'Settings':
-        return Text('Here you can manage your app preferences, notifications, and account settings. \n\n'
-            'Options include:\n1. Notification Preferences\n2. Account Management\n3. App Theme\n4. Language Settings\n5. Logout');
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildClickableOption(context, 'Notification Preferences'),
+            SizedBox(height: 10),
+            _buildClickableOption(context, 'Account Management'),
+            SizedBox(height: 10),
+            _buildClickableOption(context, 'App Theme'),
+            SizedBox(height: 10),
+            _buildClickableOption(context, 'Language Settings'),
+          ],
+        );
 
       case 'Privacy Policy':
         return Text('1. We collect user data to improve the app.\n2. Your data is kept secure.\n3. No data is shared with third parties.\n4. You can request to delete your data.\n5. Usage data is collected for analytics.');
@@ -118,6 +113,37 @@ class MoreOption extends StatelessWidget {
       default:
         return Text('$label content goes here.');
     }
+  }
+
+  // Helper method to create clickable options
+  Widget _buildClickableOption(BuildContext context, String optionLabel) {
+    return GestureDetector(
+      onTap: () => _showUnderConstructionDialog(context),
+      child: Text(
+        optionLabel,
+        style: TextStyle(
+          color: Colors.green.shade700,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  // Function to show "Under construction" popup
+  void _showUnderConstructionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Coming Soon!', style: TextStyle(fontWeight: FontWeight.bold)),
+        content: Text('This setting is under construction. Stay tuned for future updates!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('Close'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
