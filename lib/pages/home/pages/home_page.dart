@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../components/home_drawer.dart';
-import 'package:waste_management_tracking/components/services/add_link.dart';
 
 class HomeContent extends StatelessWidget {
   HomeContent({Key? key}) : super(key: key);
@@ -375,13 +374,6 @@ class HomeContent extends StatelessWidget {
 
   Widget _buildAdTab(BuildContext context, Map<String, String> ad) {
     return GestureDetector(
-      onTap: () {
-        showAdDialog(
-          context,
-          ad['title']!,
-          ad['link']!, // Pass the specific link for this ad
-        );
-      },
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(
