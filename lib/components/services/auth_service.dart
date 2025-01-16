@@ -9,6 +9,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: '292559066781-1s0g14fha7tlvjo23a05bci5e7uu57k5.apps.googleusercontent.com',
     scopes: ['email', 'profile'],
   );
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
