@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/driver/driver_dashboard.dart';
+// import '../../../components/driver/driver_dashboard.dart';
 import '../../../components/user/sign_in_page.dart';
+import 'package:waste_management_tracking/components/driver/driver_login_page.dart';
 
 class LoginSelectionScreen extends StatelessWidget {
   const LoginSelectionScreen({Key? key}) : super(key: key);
@@ -141,7 +142,7 @@ class LoginSelectionScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DriverDashboardScreen(),
+                              builder: (context) => const DriverLoginPage(),
                             ),
                           );
                         },
