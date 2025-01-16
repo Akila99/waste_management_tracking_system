@@ -139,6 +139,7 @@ class HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      extendBody: true,
       appBar: AppBar(
         backgroundColor: Colors.green[500],
         title: Text(user != null ? 'Hello, ${user.displayName ?? "User"}!' : 'Hello! User'),

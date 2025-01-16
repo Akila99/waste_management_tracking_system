@@ -9,17 +9,19 @@ class LoginSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFE8F5E9),
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: Text('Log In'),
+        backgroundColor: const Color(0xFF4CAF50),
+        elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'Log In',
+          style: TextStyle(color: Colors.white),
         ),
       ),
-      backgroundColor: const Color(0xFFE8F5E9),
       body: Stack(
         children: [
           // Background Pattern
@@ -50,9 +52,9 @@ class LoginSelectionScreen extends StatelessWidget {
           // Main Content
           SafeArea(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 60),
-                // App Logo - Changed to recycle icon
+                // App Logo
                 Container(
                   width: 120,
                   height: 120,
@@ -61,14 +63,16 @@ class LoginSelectionScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: const Icon(
-                    Icons.recycling,  // Changed from eco to recycling
+                    Icons.recycling,
                     size: 60,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 40),
+                // Title and Subtitle - Now centered
                 const Text(
-                  'Waste Management Tracking',
+                  'Waste Management\nTracking',
+                  textAlign: TextAlign.center, // Added text alignment
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -78,6 +82,7 @@ class LoginSelectionScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 const Text(
                   'Choose your account type',
+                  textAlign: TextAlign.center, // Added text alignment
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.grey,
@@ -97,13 +102,12 @@ class LoginSelectionScreen extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // User Account Button
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const SignInPage(), // Navigate to SignInPage
+                              builder: (context) => const SignInPage(),
                             ),
                           );
                         },
@@ -132,7 +136,6 @@ class LoginSelectionScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      // Driver Account Button
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
