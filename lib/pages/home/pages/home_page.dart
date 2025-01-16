@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/home_drawer.dart';
+import 'package:waste_management_tracking/components/services/add_link.dart';
 
 class HomeContent extends StatelessWidget {
   HomeContent({Key? key}) : super(key: key);
@@ -38,10 +39,10 @@ class HomeContent extends StatelessWidget {
   ];
 
   final List<Map<String, String>> adTabs = [
-    {'title': 'Special Offer 1', 'image': 'assets/images/ad1.jpg', 'link': 'https://www.yahoo.com'},
-    {'title': 'Special Offer 2', 'image': 'assets/images/ad2.jpg', 'link': 'https://www.google.com'},
-    {'title': 'Special Offer 3', 'image': 'assets/images/ad3.jpg', 'link': 'https://www.kfc.com'},
-    {'title': 'Special Offer 4', 'image': 'assets/images/stable.jpg', 'link': 'https://www.ecu.edu.au'},
+    {'title': 'Colombo Municipal Council ', 'image': 'assets/images/ad1.jpg', 'link': 'https://www.colombo.mc.gov.lk/'},
+    {'title': 'KFC Offers', 'image': 'assets/images/ad2.jpg', 'link': 'https://www.kfc.lk/'},
+    {'title': 'View Online News', 'image': 'assets/images/ad3.jpeg', 'link': 'https://www.dailymirror.lk/'},
+    {'title': 'Daraz Offers', 'image': 'assets/images/stable.jpeg', 'link': 'https://www.daraz.lk/#?'},
   ];
 
   @override
@@ -374,6 +375,13 @@ class HomeContent extends StatelessWidget {
 
   Widget _buildAdTab(BuildContext context, Map<String, String> ad) {
     return GestureDetector(
+      onTap: () {
+        showAdDialog(
+          context,
+          ad['title']!,
+          ad['link']!, // Pass the specific link for this ad
+        );
+      },
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(

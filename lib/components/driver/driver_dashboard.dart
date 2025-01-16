@@ -1,7 +1,15 @@
+
 import 'package:flutter/material.dart';
 
 class DriverDashboardScreen extends StatelessWidget {
-  const DriverDashboardScreen({Key? key}) : super(key: key);
+  final String driverName;
+  final String vehicleId;
+
+  const DriverDashboardScreen({
+    Key? key,
+    required this.driverName,
+    required this.vehicleId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,17 +61,17 @@ class DriverDashboardScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          const Text(
-                            'Welcome, Driver',
-                            style: TextStyle(
+                          Text(
+                            'Welcome, $driverName',
+                            style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 8),
-                          const Text(
-                            'Vehicle: MUN-2024',
-                            style: TextStyle(
+                          Text(
+                            'Vehicle: $vehicleId',
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Colors.grey,
                             ),
@@ -94,7 +102,8 @@ class DriverDashboardScreen extends StatelessWidget {
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.play_circle_outline, color: Colors.white, size: 28),
+                            Icon(Icons.play_circle_outline,
+                                color: Colors.white, size: 28),
                             SizedBox(width: 12),
                             Text(
                               'Start Trip',
@@ -165,14 +174,12 @@ class DriverDashboardScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                // Close the dialog
                 Navigator.of(context).pop();
               },
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                // End trip logic
                 Navigator.of(context).pop(); // Close the dialog
                 _endTrip(context);
               },
@@ -188,7 +195,6 @@ class DriverDashboardScreen extends StatelessWidget {
   }
 
   void _endTrip(BuildContext context) {
-    // Navigate back to the sign in page (e.g., using Navigator.pop)
-    Navigator.pop(context); // This will pop the current screen and navigate back to the sign in page
+    Navigator.pop(context);
   }
 }

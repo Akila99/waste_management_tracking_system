@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-// import '../../../components/driver/driver_dashboard.dart';
-import '../../../components/user/sign_in_page.dart';
+import '../../../components/driver/driver_dashboard.dart';
 import 'package:waste_management_tracking/components/driver/driver_login_page.dart';
+import '../../../components/user/sign_in_page.dart';
 
 class LoginSelectionScreen extends StatelessWidget {
   const LoginSelectionScreen({Key? key}) : super(key: key);
@@ -11,18 +10,6 @@ class LoginSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE8F5E9),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF4CAF50),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Log In',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
       body: Stack(
         children: [
           // Background Pattern
@@ -53,40 +40,54 @@ class LoginSelectionScreen extends StatelessWidget {
           // Main Content
           SafeArea(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // App Logo
-                Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF2E7D32),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: const Icon(
-                    Icons.recycling,
-                    size: 60,
-                    color: Colors.white,
+                // Back Button
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: const Color(0xFF2E7D32),),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ),
                 const SizedBox(height: 40),
-                // Title and Subtitle - Now centered
-                const Text(
-                  'Waste Management\nTracking',
-                  textAlign: TextAlign.center, // Added text alignment
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2E7D32),
+                // App Logo - Changed to recycle icon
+                Center(
+                  child: Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2E7D32),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Icon(
+                      Icons.recycling, // Changed from eco to recycling
+                      size: 60,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                const Center(
+                  child: Text(
+                    'Waste Management Tracking',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2E7D32),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Choose your account type',
-                  textAlign: TextAlign.center, // Added text alignment
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey,
+                const Center(
+                  child: Text(
+                    'Choose your account type',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
                 const Spacer(),
@@ -103,12 +104,13 @@ class LoginSelectionScreen extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // User Account Button
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const SignInPage(),
+                              builder: (context) => const SignInPage(), // Navigate to SignInPage
                             ),
                           );
                         },
@@ -137,12 +139,13 @@ class LoginSelectionScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
+                      // Driver Account Button
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DriverLoginPage(),
+                              builder: (context) => const DriverLoginPage(), // Navigate to DriverLoginPage
                             ),
                           );
                         },
@@ -189,4 +192,3 @@ class LoginSelectionScreen extends StatelessWidget {
     );
   }
 }
-

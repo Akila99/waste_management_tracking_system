@@ -41,12 +41,12 @@ class HomeScreenState extends State<HomeScreen> {
 
   Future<void> _signOut() async {
     try {
-      await _authService.signOut();
+      await _authService.signOut(); // Sign out the user
       if (mounted) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => LoginSelectionScreen()),
-              (route) => false,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+              (route) => false, // Remove all previous routes
         );
       }
     } catch (e) {
@@ -224,7 +224,14 @@ class HomeScreenState extends State<HomeScreen> {
                 leading: Icon(Icons.settings),
                 title: Text('Settings'),
                 onTap: () {
-                  // Navigate to settings
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MoreScreen(
+                        initialLabel: 'Settings', // Pass the initial label to MoreScreen
+                      ),
+                    ),
+                  );
                 },
               ),
               ListTile(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:waste_management_tracking/components/driver/driver_dashboard.dart';
 import 'package:waste_management_tracking/components/utils/custom_button.dart';
 
@@ -35,51 +34,42 @@ class _DriverLoginPageState extends State<DriverLoginPage> {
     });
 
     try {
-      // Attempt to sign in
-      final UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      // Check if the user is a driver in Firestore
-      final userDoc = await FirebaseFirestore.instance
+      // Fetch the driver document by email
+      final querySnapshot = await FirebaseFirestore.instance
           .collection('drivers')
-          .doc(userCredential.user?.uid)
+          .where('email', isEqualTo: _emailController.text.trim())
+          .limit(1)
           .get();
 
-      if (!userDoc.exists) {
-        // If user is not a driver, sign them out and show error
-        await FirebaseAuth.instance.signOut();
-        throw 'Not authorized as a driver';
+      if (querySnapshot.docs.isEmpty) {
+        throw 'No driver found with this email';
+      }
+
+      final driverDoc = querySnapshot.docs.first;
+      final driverData = driverDoc.data();
+
+      // Verify the password
+      if (driverData['password'] != _passwordController.text.trim()) {
+        throw 'Invalid password';
       }
 
       // Verify driver's status is active
-      final driverData = userDoc.data();
-      if (driverData?['status'] != 'active') {
-        await FirebaseAuth.instance.signOut();
+      if (driverData['status'] != 'active') {
         throw 'Driver account is not active';
       }
 
       if (mounted) {
-        // Navigate to driver dashboard
+        // Navigate to the driver dashboard and pass the driver data
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const DriverDashboardScreen(),
+            builder: (context) => DriverDashboardScreen(
+              driverName: driverData['name'] ?? 'Driver',
+              vehicleId: driverData['vehicleId'] ?? 'Unknown Vehicle',
+            ),
           ),
         );
       }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _errorMessage = switch (e.code) {
-          'user-not-found' => 'No driver found with this email',
-          'wrong-password' => 'Invalid password',
-          'invalid-email' => 'Invalid email format',
-          'user-disabled' => 'This account has been disabled',
-          _ => 'Authentication failed: ${e.message}',
-        };
-      });
     } catch (e) {
       setState(() {
         _errorMessage = e.toString();
