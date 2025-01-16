@@ -1,6 +1,6 @@
-// home_page.dart
 import 'package:flutter/material.dart';
 import '../components/home_drawer.dart';
+import 'package:waste_management_tracking/components/services/add_link.dart';
 
 class HomeContent extends StatelessWidget {
   HomeContent({Key? key}) : super(key: key);
@@ -39,25 +39,39 @@ class HomeContent extends StatelessWidget {
   ];
 
   final List<Map<String, String>> adTabs = [
-    {'title': 'Special Offer 1', 'image': 'assets/images/ad1.jpg'},
-    {'title': 'Special Offer 2', 'image': 'assets/images/ad2.jpg'},
-    {'title': 'Special Offer 3', 'image': 'assets/images/ad3.jpg'},
-    {'title': 'Special Offer 4', 'image': 'assets/images/stable.jpg'},
+    {'title': 'Special Offer 1', 'image': 'assets/images/ad1.jpg', 'link': 'https://www.yahoo.com'},
+    {'title': 'Special Offer 2', 'image': 'assets/images/ad2.jpg', 'link': 'https://www.google.com'},
+    {'title': 'Special Offer 3', 'image': 'assets/images/ad3.jpg', 'link': 'https://www.kfc.com'},
+    {'title': 'Special Offer 4', 'image': 'assets/images/stable.jpg', 'link': 'https://www.ecu.edu.au'},
   ];
 
   @override
   Widget build(BuildContext context) {
+    ValueNotifier<int> pageIndex = ValueNotifier<int>(0);
+    ValueNotifier<int> adPageIndex = ValueNotifier<int>(0);
+
     PageController pageController = PageController(viewportFraction: 0.85);
     PageController adPageController = PageController(viewportFraction: 0.85);
 
-    return Container(
-      color: Colors.white,
-      child: SingleChildScrollView(
+    void updatePageIndex(PageController controller,
+        ValueNotifier<int> notifier) {
+      controller.addListener(() {
+        notifier.value = controller.page?.round() ?? 0;
+      });
+    }
+
+    updatePageIndex(pageController, pageIndex);
+    updatePageIndex(adPageController, adPageIndex);
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Main Tabs Section
             Container(
-              height: 600,
+              height: 500,
               color: Colors.white,
               child: Stack(
                 alignment: Alignment.center,
@@ -69,48 +83,51 @@ class HomeContent extends StatelessWidget {
                       return _buildTab(context, tabs[index]);
                     },
                   ),
-                  Positioned(
-                    left: 0,
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back_ios, color: Colors.green[700]),
-                        onPressed: () {
-                          pageController.previousPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        },
-                      ),
-                    ),
+                  ValueListenableBuilder<int>(
+                    valueListenable: pageIndex,
+                    builder: (context, value, _) {
+                      return Visibility(
+                        visible: value > 0,
+                        child: Positioned(
+                          left: 0,
+                          child: IconButton(
+                            icon: Icon(Icons.arrow_back_ios,
+                                color: Colors.green[700]),
+                            onPressed: () {
+                              pageController.previousPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  Positioned(
-                    right: 0,
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_forward_ios, color: Colors.green[700]),
-                        onPressed: () {
-                          pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        },
-                      ),
-                    ),
+                  ValueListenableBuilder<int>(
+                    valueListenable: pageIndex,
+                    builder: (context, value, _) {
+                      return Visibility(
+                        visible: value < tabs.length - 1,
+                        child: Positioned(
+                          right: 0,
+                          child: IconButton(
+                            icon: Icon(Icons.arrow_forward_ios,
+                                color: Colors.green[700]),
+                            onPressed: () {
+                              pageController.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
 
             // Track Waste Collection Card
@@ -136,12 +153,13 @@ class HomeContent extends StatelessWidget {
                     ),
                   ),
                   subtitle: Text(
-                    'View real time tracking',
+                    'View real-time tracking',
                     style: TextStyle(
                       color: Colors.grey[600],
                     ),
                   ),
                   onTap: () {
+                    // Navigation logic here
                     final HomeScreenState? homeState =
                     context.findAncestorStateOfType<HomeScreenState>();
                     if (homeState != null) {
@@ -182,13 +200,15 @@ class HomeContent extends StatelessWidget {
                               color: Colors.green[50],
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Icon(Icons.notifications_active, color: Colors.green[700]),
+                            child: Icon(Icons.notifications_active,
+                                color: Colors.green[700]),
                           ),
                           title: const Text(
                             'New Feature Added',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: const Text('Real-time waste collection tracking is now available'),
+                          subtitle: const Text(
+                              'Real-time waste collection tracking is now available'),
                         ),
                         const Divider(),
                         ListTile(
@@ -198,13 +218,15 @@ class HomeContent extends StatelessWidget {
                               color: Colors.green[50],
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Icon(Icons.system_update, color: Colors.green[700]),
+                            child: Icon(
+                                Icons.system_update, color: Colors.green[700]),
                           ),
                           title: const Text(
                             'System Update',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: const Text('Performance improvements and bug fixes'),
+                          subtitle: const Text(
+                              'Performance improvements and bug fixes'),
                         ),
                       ],
                     ),
@@ -215,9 +237,9 @@ class HomeContent extends StatelessWidget {
 
             const SizedBox(height: 20),
 
+            // Ad Tabs Section
             Container(
               height: 300,
-              color: Colors.white,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -228,49 +250,52 @@ class HomeContent extends StatelessWidget {
                       return _buildAdTab(context, adTabs[index]);
                     },
                   ),
-                  Positioned(
-                    left: 0,
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back_ios, color: Colors.green[700]),
-                        onPressed: () {
-                          adPageController.previousPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        },
-                      ),
-                    ),
+                  ValueListenableBuilder<int>(
+                    valueListenable: adPageIndex,
+                    builder: (context, value, _) {
+                      return Visibility(
+                        visible: value > 0,
+                        child: Positioned(
+                          left: 0,
+                          child: IconButton(
+                            icon: Icon(Icons.arrow_back_ios,
+                                color: Colors.green[700]),
+                            onPressed: () {
+                              adPageController.previousPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  Positioned(
-                    right: 0,
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_forward_ios, color: Colors.green[700]),
-                        onPressed: () {
-                          adPageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        },
-                      ),
-                    ),
+                  ValueListenableBuilder<int>(
+                    valueListenable: adPageIndex,
+                    builder: (context, value, _) {
+                      return Visibility(
+                        visible: value < adTabs.length - 1,
+                        child: Positioned(
+                          right: 0,
+                          child: IconButton(
+                            icon: Icon(Icons.arrow_forward_ios,
+                                color: Colors.green[700]),
+                            onPressed: () {
+                              adPageController.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
             ),
-
-            const SizedBox(height: 80),
+            const SizedBox(height: 20), // Changed from 80 to 40 (50% reduction)
           ],
         ),
       ),
@@ -278,22 +303,39 @@ class HomeContent extends StatelessWidget {
   }
 
   Widget _buildTab(BuildContext context, Map<String, String> tab) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      color: Colors.white,
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      child: Container(
-        padding: const EdgeInsets.all(20),
+    return GestureDetector(
+      onTap: () {
+        // Show the popup dialog when the tab is clicked
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Coming Soon!"),
+              content: Text("Special services are coming soon!"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Card(
+        elevation: 4,
+        color: Colors.lightBlue[50],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              height: 200, // Increased height for bigger images
-              width: double.infinity,
-              padding: const EdgeInsets.all(10),
+            SizedBox(
+              height: 180, // Constrained height for image
               child: Image.asset(
                 tab['image']!,
                 fit: BoxFit.contain,
@@ -306,21 +348,24 @@ class HomeContent extends StatelessWidget {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Text(
               tab['title']!,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.green[700],
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 15),
-            Text(
-              tab['description']!,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                tab['description']!,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
             ),
           ],
         ),
@@ -329,48 +374,43 @@ class HomeContent extends StatelessWidget {
   }
 
   Widget _buildAdTab(BuildContext context, Map<String, String> ad) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            child: Container(
-              height: 200, // Increased height for bigger images
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.green[100],
-              ),
-              child: Image.asset(
-                ad['image']!,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    Icons.campaign,
-                    size: 60,
-                    color: Colors.green[700],
-                  );
-                },
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-            child: Text(
-              ad['title']!,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.green[700],
+    return GestureDetector(
+      onTap: () {
+        showAdDialog(
+          context,
+          ad['title']!,
+          ad['link']!, // Pass the specific link for this ad
+        );
+      },
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              child: Container(
+                height: 200,
+                width: double.infinity,
+                child: Image.asset(
+                  ad['image']!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.campaign,
+                      size: 60,
+                      color: Colors.green[700],
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

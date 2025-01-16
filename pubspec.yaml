@@ -8,6 +8,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+
   # Firebase for authentication and backend
   firebase_core: ^3.9.0
   firebase_auth: ^5.3.4
@@ -15,6 +16,8 @@ dependencies:
   firebase_storage: ^12.3.7
   firebase_app_check: ^0.3.1+7
   flutter_secure_storage: ^9.2.2
+
+  url_launcher: ^6.1.7
 
   # Google Maps Integration
   google_maps_flutter: ^2.10.0
@@ -45,5 +48,6 @@ flutter:
   assets:
     - map_theme/retro_theme.json
     - assets/images/
+    - assets/route_maps/
 
 

@@ -13,44 +13,70 @@ class _TrackingScreenState extends State<TrackingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Get current user
-    final user = _authService.currentUser;
+    return StreamBuilder<User?>(
+      stream: _authService.authStateChanges,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Live Tracking'),
-      ),
-      body: user != null ? _buildTrackingContent() : _buildSignInPrompt(),
+        final user = snapshot.data;
+
+        return Scaffold(
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Live Tracking',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: user != null
+                    ? _buildTrackingContent()  // Display "Live tracking coming soon!" for signed-in users
+                    : _buildSignInPrompt(),   // Prompt for sign-in if not signed in
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
+  // Updated content for signed-in users
   Widget _buildTrackingContent() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Add your tracking content here
           Text(
-            'Welcome to Live Tracking',
+            'Live tracking coming soon!',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
           SizedBox(height: 20),
           Text(
-            'Your tracking features will appear here',
+            'Stay tuned for updates.',
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey[600],
             ),
           ),
-          // Add more tracking-related widgets
         ],
       ),
     );
   }
 
+  // Sign-in prompt if the user is not logged in
   Widget _buildSignInPrompt() {
     return Center(
       child: Padding(
