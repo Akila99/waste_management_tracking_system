@@ -259,10 +259,15 @@ class HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: _screens[_currentIndex],
-      bottomNavigationBar: MyBottomNavBar(
+      bottomNavigationBar: MyBottomNavBarWithChatbot(
         onTabTapped: _onTabTapped,
         currentIndex: _currentIndex,
+        onChatbotTap: () {
+          // Handle chatbot icon tap here
+          print('Chatbot tapped!');
+        },
       ),
+
     );
   }
 }
