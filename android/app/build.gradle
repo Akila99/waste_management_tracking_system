@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.waste_management_tracking"
-        minSdkVersion 23
+        minSdkVersion 34
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutter.versionCode
         versionName flutter.versionName

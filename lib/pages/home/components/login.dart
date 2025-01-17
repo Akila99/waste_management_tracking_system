@@ -71,12 +71,14 @@ class LoginSelectionScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 const Center(
-                  child: Text(
-                    'Waste Management Tracking',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2E7D32),
+                  child: Center(
+                    child: Text(
+                      'Waste Management Tracking',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2E7D32),
+                      ),
                     ),
                   ),
                 ),

@@ -64,8 +64,8 @@ class _DriverLoginPageState extends State<DriverLoginPage> {
           context,
           MaterialPageRoute(
             builder: (context) => DriverDashboardScreen(
-              driverName: driverData['name'] ?? 'Driver',
-              vehicleId: driverData['vehicleId'] ?? 'Unknown Vehicle',
+              // driverName: driverData['name'] ?? 'Driver',
+              // vehicleId: driverData['vehicleId'] ?? 'Unknown Vehicle',
             ),
           ),
         );

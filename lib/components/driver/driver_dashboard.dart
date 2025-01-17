@@ -1,15 +1,10 @@
-
 import 'package:flutter/material.dart';
+import 'package:waste_management_tracking/components/driver/map_screen.dart';
+
+
 
 class DriverDashboardScreen extends StatelessWidget {
-  final String driverName;
-  final String vehicleId;
-
-  const DriverDashboardScreen({
-    Key? key,
-    required this.driverName,
-    required this.vehicleId,
-  }) : super(key: key);
+  const DriverDashboardScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +15,7 @@ class DriverDashboardScreen extends StatelessWidget {
           'Driver Dashboard',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.green[500],
+        backgroundColor: const Color(0xFF2E7D32),
         elevation: 0,
       ),
       body: Stack(
@@ -32,7 +27,7 @@ class DriverDashboardScreen extends StatelessWidget {
             right: 0,
             height: 150,
             child: Container(
-              color: Colors.green[500],
+              color: const Color(0xFF2E7D32),
             ),
           ),
           SafeArea(
@@ -61,17 +56,17 @@ class DriverDashboardScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          Text(
-                            'Welcome, $driverName',
-                            style: const TextStyle(
+                          const Text(
+                            'Welcome, Driver',
+                            style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Text(
-                            'Vehicle: $vehicleId',
-                            style: const TextStyle(
+                          const Text(
+                            'Vehicle: MUN-2024',
+                            style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey,
                             ),
@@ -89,6 +84,10 @@ class DriverDashboardScreen extends StatelessWidget {
                     children: [
                       ElevatedButton(
                         onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const MapScreen()),
+                          );
                           // Start trip logic
                         },
                         style: ElevatedButton.styleFrom(
@@ -102,8 +101,7 @@ class DriverDashboardScreen extends StatelessWidget {
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.play_circle_outline,
-                                color: Colors.white, size: 28),
+                            Icon(Icons.play_circle_outline, color: Colors.white, size: 28),
                             SizedBox(width: 12),
                             Text(
                               'Start Trip',
@@ -174,12 +172,14 @@ class DriverDashboardScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
+                // Close the dialog
                 Navigator.of(context).pop();
               },
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
+                // End trip logic
                 Navigator.of(context).pop(); // Close the dialog
                 _endTrip(context);
               },
@@ -195,6 +195,7 @@ class DriverDashboardScreen extends StatelessWidget {
   }
 
   void _endTrip(BuildContext context) {
-    Navigator.pop(context);
+    // Navigate back to the sign in page (e.g., using Navigator.pop)
+    Navigator.pop(context); // This will pop the current screen and navigate back to the sign in page
   }
 }
