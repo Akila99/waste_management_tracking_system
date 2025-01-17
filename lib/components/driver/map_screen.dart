@@ -319,7 +319,6 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-
   Future<BitmapDescriptor> _getTruckIcon() async {
     try {
       return await BitmapDescriptor.asset(
@@ -331,14 +330,6 @@ class _MapScreenState extends State<MapScreen> {
       return BitmapDescriptor.defaultMarker;
     }
   }
-
-
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
