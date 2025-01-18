@@ -295,7 +295,7 @@ class HomeContent extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20), // Changed from 80 to 40 (50% reduction)
+            const SizedBox(height: 70), // Changed from 80 to 40 (50% reduction)
           ],
         ),
       ),
