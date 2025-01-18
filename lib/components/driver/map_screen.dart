@@ -272,6 +272,47 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  // void _startLiveTracking() {
+  //   positionStream = Geolocator.getPositionStream(
+  //     locationSettings: const LocationSettings(
+  //       accuracy: LocationAccuracy.high,
+  //       distanceFilter: 10, // Update location every 10 meters
+  //     ),
+  //   ).listen((Position position) {
+  //     if (googleMapController != null) {
+  //       _updateUserLocation(position);
+  //     } else {
+  //       debugPrint("Map is not ready for live tracking.");
+  //     }
+  //   });
+  // }
+  //
+  // void _updateUserLocation(Position position) async {
+  //   if (googleMapController == null) {
+  //     debugPrint("GoogleMapController is not initialized yet.");
+  //     return;
+  //   }
+  //
+  //   final LatLng newPosition = LatLng(position.latitude, position.longitude);
+  //
+  //   BitmapDescriptor truckIcon = await _getTruckIcon();
+  //
+  //   final Marker userMarker = Marker(
+  //     markerId: const MarkerId("user_location"),
+  //     position: newPosition,
+  //     icon: truckIcon,
+  //     infoWindow: const InfoWindow(title: "Truck Location"),
+  //   );
+  //
+  //   // Update markers without overwriting all markers
+  //   setState(() {
+  //     _markers.removeWhere((marker) => marker.markerId == const MarkerId("user_location"));
+  //     _markers.add(userMarker);
+  //   });
+  //
+  //   googleMapController.animateCamera(CameraUpdate.newLatLng(newPosition));
+  // }
+
   void _startLiveTracking() {
     positionStream = Geolocator.getPositionStream(
       locationSettings: const LocationSettings(
@@ -297,27 +338,42 @@ class _MapScreenState extends State<MapScreen> {
 
     BitmapDescriptor truckIcon = await _getTruckIcon();
 
+    final Marker userMarker = Marker(
+      markerId: const MarkerId("user_location"),
+      position: newPosition,
+      icon: truckIcon,
+      infoWindow: const InfoWindow(title: "Truck Location"),
+    );
+
+    // Update markers without overwriting all markers
     setState(() {
-      // Remove previous location marker
       _markers.removeWhere((marker) => marker.markerId == const MarkerId("user_location"));
-
-      // Add custom truck marker
-      _markers.add(
-        Marker(
-          markerId: const MarkerId("user_location"),
-          position: newPosition,
-          icon: truckIcon,
-          infoWindow: const InfoWindow(title: "Truck Location"),
-        ),
-      );
-
+      _markers.add(userMarker);
     });
 
-    // Move the camera to the user's new location
-    googleMapController.animateCamera(
-      CameraUpdate.newLatLng(newPosition),
-    );
+    googleMapController.animateCamera(CameraUpdate.newLatLng(newPosition));
+
+    // Save the location to Firestore
+    _storeLocationInFirestore(position);
   }
+
+  void _storeLocationInFirestore(Position position) {
+    final driverId = "driver_uid"; // Replace with dynamic driver ID if necessary
+
+    // Create a GeoPoint using the position's latitude and longitude
+    final GeoPoint geoPoint = GeoPoint(position.latitude, position.longitude);
+
+    // Update Firestore with the GeoPoint
+    FirebaseFirestore.instance.collection('drivers').doc(driverId).set({
+      'truck_live_location': geoPoint,
+      // Use a GeoPoint field
+    }, SetOptions(merge: true)).then((_) {
+      debugPrint("Location updated in Firestore for driver $driverId.");
+    }).catchError((error) {
+      debugPrint("Failed to update location in Firestore: $error");
+    });
+  }
+
 
   Future<BitmapDescriptor> _getTruckIcon() async {
     try {

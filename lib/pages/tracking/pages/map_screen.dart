@@ -4,14 +4,8 @@ import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_database/firebase_database.dart';
-
-
 import 'package:flutter/services.dart';
-import 'dart:typed_data';
-import 'package:flutter/widgets.dart';
 import 'package:image/image.dart' as img;
 import 'package:waste_management_tracking/pages/tracking/classes/truck_service.dart';
 // import 'package:custom_info_window/custom_info_window.dart';
@@ -60,6 +54,8 @@ class _MapScreenState extends State<MapScreen> {
     _loadMapStyle();
     _extractWardDetails();
     _loadTruckData(widget.provinceId, widget.districtId, widget.councilId);
+    _listenToDriverLocation(widget.provinceId, widget.districtId, widget.councilId);
+
   }
 
   void _loadMapStyle() async {
@@ -431,6 +427,82 @@ class _MapScreenState extends State<MapScreen> {
       'assets/images/truck1.png',
     );
   }
+
+
+    void _listenToDriverLocation(String provinceId, String districtId, String councilId) {
+    try {
+      _truckService
+          .fetchTruckDetailsRealtime(wardName, provinceId, districtId, councilId)
+          .listen((truckDetails) async {
+        if (truckDetails.isNotEmpty) {
+          // Iterate over each truck's details
+          for (var truck in truckDetails) {
+            // Extract the drivers array from the truck details
+            var drivers = truck['drivers'] ?? [];
+
+            // Iterate through the drivers list to check each driver's status
+            for (var driverId in drivers) {
+              // Fetch the driver's document from Firestore by their ID
+              FirebaseFirestore.instance
+                  .collection('drivers')
+                  .doc(driverId)  // Assuming driverId is the document ID in Firestore
+                  .snapshots()
+                  .listen((DocumentSnapshot snapshot) {
+                if (snapshot.exists) {
+                  final data = snapshot.data() as Map<String, dynamic>;
+
+                  // Check if the driver is active
+                  if (data['status'] == 'active') {
+                    // Get the truck_live_location (GeoPoint) for the active driver
+                    if (data.containsKey('truck_live_location')) {
+                      GeoPoint geoPoint = data['truck_live_location'];
+                      LatLng driverLocation = LatLng(geoPoint.latitude, geoPoint.longitude);
+
+                      debugPrint("Active Driver Location: ${driverLocation.latitude}, ${driverLocation.longitude}");
+
+                      // Update the map marker with the driver's live location
+                      _updateDriverMarker(driverLocation);
+                    }
+                  } else {
+                    debugPrint("Driver $driverId is not active.");
+                  }
+                } else {
+                  debugPrint("Driver document not found for $driverId.");
+                }
+              });
+            }
+          }
+        }
+      });
+    } catch (e) {
+      debugPrint("Error loading truck details: $e");
+    }
+  }
+
+
+  void _updateDriverMarker(LatLng driverLatLng) {
+    setState(() {
+      // Remove existing driver marker if any
+      _markers.removeWhere((marker) => marker.markerId.value == 'driver_marker');
+
+      // Add the new driver marker to the map
+      _markers.add(Marker(
+        markerId: MarkerId('driver_marker'),
+        position: driverLatLng,
+        infoWindow: InfoWindow(
+          title: 'Driver Location',
+          snippet: 'Latitude: ${driverLatLng.latitude}, Longitude: ${driverLatLng.longitude}',
+        ),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+      ));
+
+      // Animate camera to show driver's location
+      googleMapController.animateCamera(
+        CameraUpdate.newLatLngZoom(driverLatLng, 17),
+      );
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {

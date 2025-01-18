@@ -61,6 +61,14 @@ class TruckService {
                 'longitude': startingPoint.longitude
               };
             }
+            // Add drivers array to truck data
+            var drivers = truckDoc['drivers'];
+            if (drivers != null && drivers is List) {
+              truckData['drivers'] = drivers;
+            } else {
+              truckData['drivers'] = [];
+            }
+
 
             // Fetch schedule
             var schedule = truckDoc['schedule'];

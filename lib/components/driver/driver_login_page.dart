@@ -47,6 +47,7 @@ class _DriverLoginPageState extends State<DriverLoginPage> {
 
       final driverDoc = querySnapshot.docs.first;
       final driverData = driverDoc.data();
+      final driverDocId = driverDoc.id; // Get the document ID
 
       // Verify the password
       if (driverData['password'] != _passwordController.text.trim()) {
@@ -64,8 +65,9 @@ class _DriverLoginPageState extends State<DriverLoginPage> {
           context,
           MaterialPageRoute(
             builder: (context) => DriverDashboardScreen(
-              // driverName: driverData['name'] ?? 'Driver',
-              // vehicleId: driverData['vehicleId'] ?? 'Unknown Vehicle',
+              driverName: driverData['name'] ?? 'Driver',
+              vehicleId: driverData['vehicleId'] ?? 'Unknown Vehicle',
+              driverdocId: driverDocId,
             ),
           ),
         );
