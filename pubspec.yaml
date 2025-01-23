@@ -48,6 +48,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.2.12
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -57,4 +59,17 @@ flutter:
     - assets/images/
     - assets/route_maps/
 
+flutter_native_splash:
+  color: "#FFFFFF" # Background color (replace with green, e.g., "#00A65A")
+  image: assets/images/logo.png # Path to your custom logo
+  android: true
+  ios: true
+  web: false
+  android_gravity: center # Center the logo for Android devices
+  ios_content_mode: center # Center the logo for iOS devices
 
+flutter_icons:
+  android: true
+  ios: true
+  background_color: "#FFFFFF"
+  image_path: "assets/images/logo.png"

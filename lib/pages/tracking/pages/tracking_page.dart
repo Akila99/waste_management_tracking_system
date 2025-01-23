@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:waste_management_tracking/components/services/auth_service.dart';
-import 'package:waste_management_tracking/components/user/sign_in_page.dart';
-
-import 'dropdown.dart';
-// import '../../../components/services/auth_service.dart';
-// import '../../../components/user/sign_in_page.dart';
+import '../../../components/services/auth_service.dart';
+import '../../../components/user/sign_in_page.dart';
 
 class TrackingScreen extends StatefulWidget {
   @override
@@ -31,7 +27,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
                   'Live Tracking',
                   style: TextStyle(
@@ -43,7 +39,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
               ),
               Expanded(
                 child: user != null
-                    ? ProvinceDistrictDropdown()  // Display drop down menu for signed-in users
+                    ? _buildTrackingContent()  // Display "Live tracking coming soon!" for signed-in users
                     : _buildSignInPrompt(),   // Prompt for sign-in if not signed in
               ),
             ],
@@ -53,33 +49,32 @@ class _TrackingScreenState extends State<TrackingScreen> {
     );
   }
 
-  // // Updated content for signed-in users
-  // Widget _buildTrackingContent() {
-  //   return Center(
-  //     child: Column(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: [
-  //         Text(
-  //           'Live tracking coming soon!',
-  //           style: TextStyle(
-  //             fontSize: 20,
-  //             fontWeight: FontWeight.bold,
-  //             color: Colors.black,
-  //           ),
-  //         ),
-  //         SizedBox(height: 20),
-  //         Text(
-  //           'Stay tuned for updates.',
-  //           style: TextStyle(
-  //             fontSize: 16,
-  //             color: Colors.grey[600],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
+  // Updated content for signed-in users
+  Widget _buildTrackingContent() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Live tracking coming soon!',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Stay tuned for updates.',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   // Sign-in prompt if the user is not logged in
   Widget _buildSignInPrompt() {
