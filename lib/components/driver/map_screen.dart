@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image/image.dart' as img;
+import 'package:waste_management_tracking/pages/tracking/classes/bin_service.dart';
 import 'package:waste_management_tracking/pages/tracking/classes/truck_service.dart';
 import 'package:flutter/services.dart';
 import 'dart:typed_data';
@@ -45,7 +46,7 @@ class _MapScreenState extends State<MapScreen> {
   final List<Map<String, dynamic>> _binLocations = [];
 
 
-  final TruckService _truckService = TruckService();
+  final BinDataLoader _binDataLoader = BinDataLoader();
 
   @override
   void initState() {
@@ -56,7 +57,7 @@ class _MapScreenState extends State<MapScreen> {
     // _extractWardDetails();
     // _addWardPolygon();
     _startLiveTracking();
-    _loadTruckData();
+    _loadBinData();
 
   }
 
@@ -115,10 +116,10 @@ class _MapScreenState extends State<MapScreen> {
   //   }
   // }
 
-  void _loadTruckData() {
+  void _loadBinData() {
     try {
-      _truckService
-          .fetchTruckDetailsRealtime(wardName, provinceId, districtId, councilId)
+      _binDataLoader
+          .fetchBinDetailsRealtime(wardName, provinceId, districtId, councilId, mounted)
           .listen((truckDetails) async {
         if (truckDetails.isNotEmpty) {
           // Pass truck details to _loadBinData to extract bin data
