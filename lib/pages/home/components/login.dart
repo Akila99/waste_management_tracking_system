@@ -46,7 +46,10 @@ class LoginSelectionScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: const Color(0xFF2E7D32),),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFF2E7D32),
+                    ),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -70,24 +73,30 @@ class LoginSelectionScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 40),
+                // Centering Text
                 const Center(
-                  child: Text(
-                    'Waste Management Tracking',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2E7D32),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Center(
-                  child: Text(
-                    'Choose your account type',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey,
-                    ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Waste Management Tracking',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2E7D32),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Choose your account type',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
                 const Spacer(),
@@ -125,7 +134,8 @@ class LoginSelectionScreen extends StatelessWidget {
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.person_outline, color: Colors.white, size: 28),
+                            Icon(Icons.person_outline,
+                                color: Colors.white, size: 28),
                             SizedBox(width: 12),
                             Text(
                               'User Account',
@@ -145,7 +155,8 @@ class LoginSelectionScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DriverLoginPage(), // Navigate to DriverLoginPage
+                              builder: (context) =>
+                              const DriverLoginPage(), // Navigate to DriverLoginPage
                             ),
                           );
                         },
@@ -192,3 +203,5 @@ class LoginSelectionScreen extends StatelessWidget {
     );
   }
 }
+
+

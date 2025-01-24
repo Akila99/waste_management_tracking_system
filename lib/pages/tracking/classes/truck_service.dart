@@ -327,7 +327,7 @@ class TruckService {
                                 // Update the bin document
                                 await binDoc.reference.update({
                                   ...updatedData,
-                                  'status': 'Empty', // or any other status you wish to set
+                                  'status': 'Full', // or any other status you wish to set
                                 });
                                 debugPrint("Bin with bin_id: $binId updated successfully.");
                               }

@@ -29,7 +29,6 @@ class MapScreen extends StatefulWidget {
 
   @override
   State<MapScreen> createState() => _MapScreenState();
-
 }
 
 class _MapScreenState extends State<MapScreen> {
@@ -135,177 +134,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-
-
-
-  // Future<void> _loadBinDataRealtime(List<Map<String, dynamic>> truckDetails) async {
-  //   // Clear existing bin locations before loading new data
-  //   setState(() {
-  //     _binLocations.clear();
-  //   });
-  //
-  //   for (var truck in truckDetails) {
-  //     var schedule = truck['schedule'];
-  //
-  //     if (schedule != null) {
-  //       var nonRecycling = schedule['non_recycling'];
-  //       if (nonRecycling != null && nonRecycling.isNotEmpty) {
-  //         for (var nonRecyclingMap in nonRecycling) {
-  //           var mondayReferenceData = nonRecyclingMap['Monday_reference_data'];
-  //           // print("Monday: $mondayReferenceData");
-  //
-  //           if (mondayReferenceData != null && mondayReferenceData is Map<String, dynamic>) {
-  //             var collectionPointRefs = mondayReferenceData['collection_point_ref'];
-  //             // print('COllection:$collectionPointRefs ');
-  //
-  //             if (collectionPointRefs is List) {
-  //               for (var collectionPointRef in collectionPointRefs) {
-  //                 if (collectionPointRef is DocumentReference) {
-  //                   collectionPointRef.snapshots().listen((collectionPointSnapshot) async {
-  //                     if (collectionPointSnapshot.exists) {
-  //                       var collectionPointData = collectionPointSnapshot.data();
-  //
-  //                       if (collectionPointData is Map<String, dynamic>) {
-  //                         String roadName = collectionPointData['road_name'] ?? 'Unknown';
-  //                         var binLocationRef = collectionPointRef.collection('bin locations');
-  //                         // print('Road: $roadName');
-  //
-  //                         // Listen for real-time updates in 'bin locations'
-  //                         binLocationRef.snapshots().listen((binLocationSnapshot) {
-  //                           for (var doc in binLocationSnapshot.docs) {
-  //                             var binLocationData = doc.data();
-  //                             var location = binLocationData['location'];
-  //
-  //                             if (location != null && location is GeoPoint) {
-  //                               double latitude = location.latitude;
-  //                               double longitude = location.longitude;
-  //
-  //                               // Update bin data in a coordinated way
-  //                               setState(() {
-  //                                 // Remove any old entry with the same bin_id
-  //                                 _binLocations.removeWhere(
-  //                                         (bin) => bin['bin_id'] == binLocationData['bin_id']);
-  //                                 // print("Road Name: $roadName");
-  //
-  //                                 // Add updated bin data
-  //                                 _binLocations.add({
-  //                                   'latitude': latitude,
-  //                                   'longitude': longitude,
-  //                                   'status': binLocationData['status'],
-  //                                   'road_name': roadName,
-  //                                   'bin_id': binLocationData['bin_id'],
-  //                                 });
-  //                               });
-  //
-  //                               // Call `_addBinMarkers` after updating `_binLocations`
-  //                               _addBinMarkers(_binLocations);
-  //                             } else {
-  //                               print('Location is not a valid GeoPoint');
-  //                             }
-  //                           }
-  //                         });
-  //                       }
-  //                     }
-  //                   });
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-  // Future<void> _loadBinDataRealtime(List<Map<String, dynamic>> truckDetails) async {
-  //   // Clear existing bin locations before loading new data
-  //   _binLocations.clear();
-  //
-  //
-  //   for (var truck in truckDetails) {
-  //     var schedule = truck['schedule'];
-  //
-  //     if (schedule != null) {
-  //       var nonRecycling = schedule['non_recycling'];
-  //       if (nonRecycling != null && nonRecycling.isNotEmpty) {
-  //         for (var nonRecyclingMap in nonRecycling) {
-  //           var mondayReferenceData = nonRecyclingMap['Monday_reference_data'];
-  //
-  //           if (mondayReferenceData != null &&
-  //               mondayReferenceData is Map<String, dynamic>) {
-  //             var collectionPointRefs = mondayReferenceData['collection_point_ref'];
-  //
-  //             if (collectionPointRefs is List) {
-  //               for (var collectionPointRef in collectionPointRefs) {
-  //                 if (collectionPointRef is DocumentReference) {
-  //                   // Listen to real-time updates for the collection point
-  //                   var subscription = collectionPointRef.snapshots().listen((
-  //                       collectionPointSnapshot) async {
-  //                     if (collectionPointSnapshot.exists) {
-  //                       var collectionPointData = collectionPointSnapshot
-  //                           .data();
-  //
-  //                       if (collectionPointData is Map<String, dynamic>) {
-  //                         String roadName = collectionPointData['road_name'] ??
-  //                             'Unknown';
-  //                         var binLocationRef = collectionPointRef.collection(
-  //                             'bin locations');
-  //
-  //                         // Listen for updates in 'bin locations'
-  //                         var binSubscription = binLocationRef.snapshots()
-  //                             .listen((binLocationSnapshot) {
-  //                           List<Map<String, dynamic>> updatedBinLocations = [];
-  //
-  //                           for (var doc in binLocationSnapshot.docs) {
-  //                             var binLocationData = doc.data();
-  //                             var location = binLocationData['location'];
-  //
-  //                             if (location != null && location is GeoPoint) {
-  //                               double latitude = location.latitude;
-  //                               double longitude = location.longitude;
-  //
-  //                               updatedBinLocations.add({
-  //                                 'latitude': latitude,
-  //                                 'longitude': longitude,
-  //                                 'status': binLocationData['status'],
-  //                                 'road_name': roadName,
-  //                                 'bin_id': binLocationData['bin_id'],
-  //                               });
-  //                             } else {
-  //                               print('Location is not a valid GeoPoint');
-  //                             }
-  //                           }
-  //
-  //                           // Update state with new bin locations
-  //                           setState(() {
-  //                             for (var bin in updatedBinLocations) {
-  //                               // Remove old entry with the same bin_id
-  //                               _binLocations.removeWhere((existing) =>
-  //                               existing['bin_id'] == bin['bin_id']);
-  //                               // Add updated bin
-  //                               _binLocations.add(bin);
-  //                             }
-  //                           });
-  //
-  //                           // Add markers after state update
-  //                           _addBinMarkers(_binLocations);
-  //                         });
-  //
-  //                         subscriptions.add(binSubscription);
-  //                       }
-  //                     }
-  //                   });
-  //
-  //                   subscriptions.add(subscription);
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
 
   Future<void> _loadBinDataRealtime(List<Map<String, dynamic>> truckDetails) async {
     // Clear existing bin locations before loading new data
@@ -434,93 +262,6 @@ class _MapScreenState extends State<MapScreen> {
 
 
 
-  // Future<void> _loadTruckMovements(List<Map<String, dynamic>> truckDetails) async {
-  //   // Clear existing truck routes
-  //   // setState(() {
-  //   //   _truckRoutes.clear();
-  //   // });
-  //
-  //   for (var truck in truckDetails) {
-  //     var truckId = truck['truck_id'];
-  //     var schedule = truck['schedule'];
-  //
-  //     if (schedule != null) {
-  //       var nonRecycling = schedule['non_recycling'];
-  //       if (nonRecycling != null && nonRecycling.isNotEmpty) {
-  //         for (var nonRecyclingMap in nonRecycling) {
-  //           var mondayReferenceData = nonRecyclingMap['Monday_reference_data'];
-  //           print("Monday: $mondayReferenceData");
-  //
-  //           if (mondayReferenceData != null && mondayReferenceData is Map<String, dynamic>) {
-  //             // Extract route_geopoints
-  //             List<dynamic>? routeGeopoints = mondayReferenceData['route_geopoints'] as List<dynamic>?;
-  //             if (routeGeopoints != null) {
-  //               if (mounted) { // Check if the widget is still in the tree
-  //                 setState(() {
-  //                   _truckRoutes.add({
-  //                     'id': truckId,
-  //                     'route': routeGeopoints.map((dynamic item) {
-  //                       if (item is GeoPoint) {
-  //                         // If the item is already a GeoPoint, convert it to LatLng
-  //                         return LatLng(item.latitude, item.longitude);
-  //                       } else {
-  //                         // Handle the case where the item is not a GeoPoint (optional)
-  //                         return const LatLng(0.0, 0.0);  // Default location or handle as necessary
-  //                       }
-  //                     }).toList(),
-  //                     'route_id': mondayReferenceData['route_id'], // Add route_id to truck route data
-  //                   });
-  //                 });
-  //               }
-  //             }
-  //
-  //             // Fetch and update bin locations (existing logic remains)
-  //             var collectionPointRefs = mondayReferenceData['collection_point_ref'];
-  //             if (collectionPointRefs is List) {
-  //               for (var collectionPointRef in collectionPointRefs) {
-  //                 if (collectionPointRef is DocumentReference) {
-  //                   collectionPointRef.snapshots().listen((collectionPointSnapshot) async {
-  //                     if (collectionPointSnapshot.exists) {
-  //                       var collectionPointData = collectionPointSnapshot.data();
-  //                       if (collectionPointData is Map<String, dynamic>) {
-  //                         var collectionPointId = collectionPointData['road_name']; // Add collection point ID
-  //
-  //                         var binLocationRef = collectionPointRef.collection('bin locations');
-  //                         binLocationRef.snapshots().listen((binLocationSnapshot) {
-  //                           for (var doc in binLocationSnapshot.docs) {
-  //                             var binLocationData = doc.data();
-  //                             var location = binLocationData['location'];
-  //                             if (location != null && location is GeoPoint) {
-  //                               if (mounted) {  // Check if the widget is still mounted
-  //                                 setState(() {
-  //                                   _binTrackLocations.add({
-  //                                     'latitude': location.latitude,
-  //                                     'longitude': location.longitude,
-  //                                     'status': binLocationData['status'],
-  //                                     'bin_id': binLocationData['bin_id'],
-  //                                     'route_id': mondayReferenceData['route_id'], // Add route_id to each bin
-  //                                     'collection_point_id': collectionPointId,   // Add collection_point_id to each bin
-  //                                   });
-  //                                 });
-  //                               }
-  //                             }
-  //                           }
-  //                         });
-  //                       }
-  //                     }
-  //                   });
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  //
-  //   _startTruckRoute();
-  // }
-
   Future<void> _loadTruckMovements(List<Map<String, dynamic>> truckDetails) async {
     for (var truck in truckDetails) {
       var truckId = truck['truck_id'];
@@ -607,161 +348,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
 
-  // double calculateBearing(LatLng start, LatLng end) {
-  //   double startLat = start.latitude * (math.pi / 180);
-  //   double startLng = start.longitude * (math.pi / 180);
-  //   double endLat = end.latitude * (math.pi / 180);
-  //   double endLng = end.longitude * (math.pi / 180);
-  //
-  //   double deltaLng = endLng - startLng;
-  //
-  //   double x = math.sin(deltaLng) * math.cos(endLat);
-  //   double y = math.cos(startLat) * math.sin(endLat) -
-  //       math.sin(startLat) * math.cos(endLat) * math.cos(deltaLng);
-  //
-  //   double bearing = math.atan2(x, y) * (180 / math.pi);
-  //   return (bearing + 360) % 360; // Normalize to 0-360 degrees
-  // }
-  //
-  // /// Calculates the shortest angle for smooth rotation
-  // double shortestAngle(double from, double to) {
-  //   double difference = (to - from + 360) % 360;
-  //   if (difference > 180) {
-  //     difference -= 360;
-  //   }
-  //   return difference;
-  // }
-  //
-  //
-  // void _animateTruckMovement(String truckId, List<LatLng> route) async {
-  //   BitmapDescriptor truckIcon = await _getTruckIcon();
-  //
-  //   print('Route Length: ${route.length}');
-  //
-  //   for (int i = 0; i < route.length; i++) {
-  //     LatLng currentPoint = route[i];
-  //     LatLng? nextPoint = i < route.length - 1 ? route[i + 1] : null;
-  //     double? bearing = nextPoint != null ? calculateBearing(currentPoint, nextPoint) : null;
-  //     // Ensure that widget is still mounted before doing anything
-  //     if (!mounted) return; // Exit if widget is disposed
-  //
-  //     // // Adjust bearing for alignment
-  //     // double adjustedBearing = (bearing ?? 0) + 20 % 360;
-  //     double adjustedBearing = (bearing ?? 0);
-  //
-  //     // // Update marker position and rotation
-  //     // if (mounted) {
-  //     //   setState(() {
-  //     //     _markers.removeWhere((m) => m.markerId.value == truckId);
-  //     //     _markers.add(
-  //     //       Marker(
-  //     //         markerId: MarkerId(truckId),
-  //     //         position: currentPoint,
-  //     //         icon: truckIcon,
-  //     //         rotation: adjustedBearing, // Rotate truck marker to match heading
-  //     //         anchor: const Offset(0.5, 0.5),
-  //     //       ),
-  //     //     );
-  //     //   });
-  //     // }
-  //     // Check if the marker with truckId exists in the _markers set
-  //     print('Checking if marker exists for truckId: $truckId');
-  //     bool markerExists = _markers.any((marker) => marker.markerId.value == truckId);
-  //     print('Marker exists: $markerExists');
-  //
-  //     if (mounted) {
-  //       setState(() {
-  //         // Only update if the marker exists
-  //         if (markerExists) {
-  //           print('Updating marker: $truckId with icon and position');
-  //           _markers = _markers.map((marker) {
-  //             if (marker.markerId.value == truckId) {
-  //               double currentBearing = marker.rotation;
-  //               double targetBearing = adjustedBearing;
-  //
-  //               // Calculate smoothed bearing
-  //               double smoothedBearing = currentBearing +
-  //                   shortestAngle(currentBearing, targetBearing) * 0.05; // Adjust smoothness factor
-  //               return marker.copyWith(
-  //                 positionParam: currentPoint,
-  //                 iconParam: truckIcon,
-  //                 rotationParam: smoothedBearing,
-  //               );
-  //             }
-  //             return marker;
-  //           }).toSet();
-  //         } else {
-  //           print('Marker not found, adding a new marker: $truckId');
-  //           _markers.add(
-  //             Marker(
-  //               markerId: MarkerId(truckId),
-  //               position: currentPoint,
-  //               icon: truckIcon,
-  //               rotation: adjustedBearing,
-  //               anchor: const Offset(0.5, 0.5),
-  //             ),
-  //           );
-  //         }
-  //       });
-  //     }
-  //
-  //     // Animate camera for every 3rd point to reduce jitter
-  //     if (i % 3 == 0) {
-  //       googleMapController.animateCamera(
-  //         CameraUpdate.newCameraPosition(
-  //           CameraPosition(
-  //             target: currentPoint,
-  //             zoom: 17, // Adjust zoom level as needed
-  //             bearing: bearing ?? 0, // Rotate the camera to align with the truck's heading
-  //             tilt: 45, // Tilt for a 3D perspective
-  //           ),
-  //         ),
-  //       );
-  //     }
-  //
-  //     print('BinLocation saved data: $_binTrackLocations');
-  //
-  //     // Check if the truck is at a stop point
-  //     bool isStopPoint = _binTrackLocations.any((bin) =>
-  //     bin['latitude'] == currentPoint.latitude &&
-  //         bin['longitude'] == currentPoint.longitude);
-  //
-  //     if (isStopPoint) {
-  //       print("Updating database");
-  //
-  //       // Find the bin to update
-  //       var binToUpdate = _binTrackLocations.firstWhere(
-  //             (bin) =>
-  //         bin['latitude'] == currentPoint.latitude &&
-  //             bin['longitude'] == currentPoint.longitude,
-  //         orElse: () => <String, dynamic>{}, // Return an empty map if not found
-  //       );
-  //
-  //       await Future.delayed(const Duration(seconds: 3)); // Stop for 40 seconds
-  //
-  //       if (binToUpdate.isNotEmpty) {
-  //         var binId = binToUpdate['bin_id'];
-  //         var routeId = binToUpdate['route_id'];
-  //         var collectionPointId = binToUpdate['collection_point_id'];
-  //
-  //         // Update truck status to "empty"
-  //         await _truckService.updateTruckDetails(
-  //           truckId: truckId,
-  //           binId: binId,
-  //           routeId: routeId,
-  //           collectionPointId: collectionPointId,
-  //           updatedData: {"status": "Empty"},
-  //         );
-  //       }
-  //     } else {
-  //       await Future.delayed(const Duration(seconds: 1)); // Simulate movement delay
-  //     }
-  //   }
-  //
-  //   // Handle the last point
-  //   print("Reached last point: ${route.last}");
-  // }
-
   double calculateBearing(LatLng start, LatLng end) {
     double startLat = start.latitude * (math.pi / 180);
     double startLng = start.longitude * (math.pi / 180);
@@ -787,9 +373,6 @@ class _MapScreenState extends State<MapScreen> {
     return difference;
   }
 
-  double lerp(double start, double end, double t) {
-    return start + (end - start) * t;
-  }
 
   void _animateTruckMovement(String truckId, List<LatLng> route) async {
     BitmapDescriptor truckIcon = await _getTruckIcon();
@@ -800,73 +383,245 @@ class _MapScreenState extends State<MapScreen> {
       LatLng currentPoint = route[i];
       LatLng? nextPoint = i < route.length - 1 ? route[i + 1] : null;
       double? bearing = nextPoint != null ? calculateBearing(currentPoint, nextPoint) : null;
+      // Ensure that widget is still mounted before doing anything
+      if (!mounted) return; // Exit if widget is disposed
 
-      // Ensure widget is still mounted
-      if (!mounted) return;
-
+      // // Adjust bearing for alignment
+      // double adjustedBearing = (bearing ?? 0) + 20 % 360;
       double adjustedBearing = (bearing ?? 0);
 
-      setState(() {
-        bool markerExists = _markers.any((marker) => marker.markerId.value == truckId);
+      // // Update marker position and rotation
+      // if (mounted) {
+      //   setState(() {
+      //     _markers.removeWhere((m) => m.markerId.value == truckId);
+      //     _markers.add(
+      //       Marker(
+      //         markerId: MarkerId(truckId),
+      //         position: currentPoint,
+      //         icon: truckIcon,
+      //         rotation: adjustedBearing, // Rotate truck marker to match heading
+      //         anchor: const Offset(0.5, 0.5),
+      //       ),
+      //     );
+      //   });
+      // }
+      // Check if the marker with truckId exists in the _markers set
+      print('Checking if marker exists for truckId: $truckId');
+      bool markerExists = _markers.any((marker) => marker.markerId.value == truckId);
+      print('Marker exists: $markerExists');
 
-        if (markerExists) {
-          _markers = _markers.map((marker) {
-            if (marker.markerId.value == truckId) {
-              double currentBearing = marker.rotation;
-              double targetBearing = adjustedBearing;
+      if (mounted) {
+        setState(() {
+          // Only update if the marker exists
+          if (markerExists) {
+            print('Updating marker: $truckId with icon and position');
+            _markers = _markers.map((marker) {
+              if (marker.markerId.value == truckId) {
+                double currentBearing = marker.rotation;
+                double targetBearing = adjustedBearing;
 
-              // In your loop
-              double smoothedBearing = lerp(currentBearing, targetBearing, 0.1); // Adjust the t value for smoother transitions
+                // Calculate smoothed bearing
+                double smoothedBearing = currentBearing +
+                    shortestAngle(currentBearing, targetBearing) * 0.05; // Adjust smoothness factor
+                return marker.copyWith(
+                  positionParam: currentPoint,
+                  iconParam: truckIcon,
+                  rotationParam: smoothedBearing,
+                );
+              }
+              return marker;
+            }).toSet();
+          } else {
+            print('Marker not found, adding a new marker: $truckId');
+            _markers.add(
+              Marker(
+                markerId: MarkerId(truckId),
+                position: currentPoint,
+                icon: truckIcon,
+                rotation: adjustedBearing,
+                anchor: const Offset(0.5, 0.5),
+              ),
+            );
+          }
+        });
+      }
 
-
-              return marker.copyWith(
-                positionParam: currentPoint,
-                iconParam: truckIcon,
-                rotationParam: smoothedBearing,
-              );
-            }
-            return marker;
-          }).toSet();
-        } else {
-          _markers.add(
-            Marker(
-              markerId: MarkerId(truckId),
-              position: currentPoint,
-              icon: truckIcon,
-              rotation: adjustedBearing,
-              anchor: Offset(0.5, 0.5),
+      // Animate camera for every 3rd point to reduce jitter
+      if (i % 3 == 0) {
+        googleMapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: currentPoint,
+              zoom: 17, // Adjust zoom level as needed
+              bearing: bearing ?? 0, // Rotate the camera to align with the truck's heading
+              tilt: 45, // Tilt for a 3D perspective
             ),
+          ),
+        );
+      }
+
+      print('BinLocation saved data: $_binTrackLocations');
+
+      // Check if the truck is at a stop point
+      bool isStopPoint = _binTrackLocations.any((bin) =>
+      bin['latitude'] == currentPoint.latitude &&
+          bin['longitude'] == currentPoint.longitude);
+
+      if (isStopPoint) {
+        print("Updating database");
+
+        // Find the bin to update
+        var binToUpdate = _binTrackLocations.firstWhere(
+              (bin) =>
+          bin['latitude'] == currentPoint.latitude &&
+              bin['longitude'] == currentPoint.longitude,
+          orElse: () => <String, dynamic>{}, // Return an empty map if not found
+        );
+
+        await Future.delayed(const Duration(seconds: 3)); // Stop for 40 seconds
+
+        if (binToUpdate.isNotEmpty) {
+          var binId = binToUpdate['bin_id'];
+          var routeId = binToUpdate['route_id'];
+          var collectionPointId = binToUpdate['collection_point_id'];
+
+          // Update truck status to "empty"
+          await _truckService.updateTruckDetails(
+            truckId: truckId,
+            binId: binId,
+            routeId: routeId,
+            collectionPointId: collectionPointId,
+            updatedData: {"status": "Full"},
           );
         }
-      });
-
-      // Animate camera to follow the truck and rotate with its direction
-      googleMapController.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: currentPoint,
-            zoom: 17,
-            bearing: adjustedBearing, // Align map bearing with truck direction
-            tilt: 45, // Optional tilt for better visualization
-          ),
-        ),
-      );
-
-      print('Current Point: $currentPoint, Adjusted Bearing: $adjustedBearing');
-
-      // Simulate stop or movement delay
-      if (_binTrackLocations.any((bin) =>
-      bin['latitude'] == currentPoint.latitude &&
-          bin['longitude'] == currentPoint.longitude)) {
-        print("Updating database for stop point");
-        await Future.delayed(const Duration(seconds: 3)); // Stop for 3 seconds
       } else {
-        await Future.delayed(const Duration(seconds: 1)); // Movement delay
+        await Future.delayed(const Duration(seconds: 1)); // Simulate movement delay
       }
     }
 
+    // Handle the last point
     print("Reached last point: ${route.last}");
   }
+
+  // double calculateBearing(LatLng start, LatLng end) {
+  //   double startLat = start.latitude * (math.pi / 180);
+  //   double startLng = start.longitude * (math.pi / 180);
+  //   double endLat = end.latitude * (math.pi / 180);
+  //   double endLng = end.longitude * (math.pi / 180);
+  //
+  //   double deltaLng = endLng - startLng;
+  //
+  //   double x = math.sin(deltaLng) * math.cos(endLat);
+  //   double y = math.cos(startLat) * math.sin(endLat) -
+  //       math.sin(startLat) * math.cos(endLat) * math.cos(deltaLng);
+  //
+  //   double bearing = math.atan2(x, y) * (180 / math.pi);
+  //   return (bearing + 360) % 360; // Normalize to 0-360 degrees
+  // }
+  //
+  // /// Calculates the shortest angle for smooth rotation
+  // double shortestAngle(double from, double to) {
+  //   double difference = (to - from + 360) % 360;
+  //   if (difference > 180) {
+  //     difference -= 360;
+  //   }
+  //   return difference;
+  // }
+  //
+  // double lerp(double start, double end, double t) {
+  //   return start + (end - start) * t;
+  // }
+  //
+  // void _animateTruckMovement(String truckId, List<LatLng> route) async {
+  //   BitmapDescriptor truckIcon = await _getTruckIcon();
+  //
+  //   print('Route Length: ${route.length}');
+  //
+  //   for (int i = 0; i < route.length; i++) {
+  //     LatLng currentPoint = route[i];
+  //     LatLng? nextPoint = i < route.length - 1 ? route[i + 1] : null;
+  //     double? bearing = nextPoint != null ? calculateBearing(currentPoint, nextPoint) : null;
+  //
+  //     // Ensure widget is still mounted
+  //     if (!mounted) return;
+  //
+  //     double adjustedBearing = (bearing ?? 0);
+  //
+  //     setState(() {
+  //       bool markerExists = _markers.any((marker) => marker.markerId.value == truckId);
+  //
+  //       if (markerExists) {
+  //         _markers = _markers.map((marker) {
+  //           if (marker.markerId.value == truckId) {
+  //             double currentBearing = marker.rotation;
+  //             double targetBearing = adjustedBearing;
+  //
+  //             // In your loop
+  //             double smoothedBearing = lerp(currentBearing, targetBearing, 0.1); // Adjust the t value for smoother transitions
+  //
+  //
+  //             return marker.copyWith(
+  //               positionParam: currentPoint,
+  //               iconParam: truckIcon,
+  //               rotationParam: smoothedBearing,
+  //             );
+  //           }
+  //           return marker;
+  //         }).toSet();
+  //       } else {
+  //         _markers.add(
+  //           Marker(
+  //             markerId: MarkerId(truckId),
+  //             position: currentPoint,
+  //             icon: truckIcon,
+  //             rotation: adjustedBearing,
+  //             anchor: Offset(0.5, 0.5),
+  //           ),
+  //         );
+  //       }
+  //     });
+  //
+  //     // Animate camera to follow the truck and rotate with its direction
+  //     googleMapController.animateCamera(
+  //       CameraUpdate.newCameraPosition(
+  //         CameraPosition(
+  //           target: currentPoint,
+  //           zoom: 17,
+  //           bearing: adjustedBearing, // Align map bearing with truck direction
+  //           tilt: 45, // Optional tilt for better visualization
+  //         ),
+  //       ),
+  //     );
+  //
+  //     print('Current Point: $currentPoint, Adjusted Bearing: $adjustedBearing');
+  //
+  //     // Simulate stop or movement delay
+  //     if (_binTrackLocations.any((bin) =>
+  //     bin['latitude'] == currentPoint.latitude &&
+  //         bin['longitude'] == currentPoint.longitude)) {
+  //       print("Updating database for stop point");
+  //       await Future.delayed(const Duration(seconds: 3)); // Stop for 3 seconds
+  //       if (binToUpdate.isNotEmpty) {
+  //         var binId = binToUpdate['bin_id'];
+  //         var routeId = binToUpdate['route_id'];
+  //         var collectionPointId = binToUpdate['collection_point_id'];
+  //
+  //         // Update truck status to "empty"
+  //         await _truckService.updateTruckDetails(
+  //           truckId: truckId,
+  //           binId: binId,
+  //           routeId: routeId,
+  //           collectionPointId: collectionPointId,
+  //           updatedData: {"status": "Empty"},
+  //         );
+  //       }
+  //     } else {
+  //       await Future.delayed(const Duration(seconds: 1)); // Movement delay
+  //     }
+  //   }
+  //
+  //   print("Reached last point: ${route.last}");
+  // }
 
 
 

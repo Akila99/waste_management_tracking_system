@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:waste_management_tracking/pages/tracking/pages/dropdown.dart';
 import '../../../components/services/auth_service.dart';
 import '../../../components/user/sign_in_page.dart';
 
@@ -39,7 +40,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
               ),
               Expanded(
                 child: user != null
-                    ? _buildTrackingContent()  // Display "Live tracking coming soon!" for signed-in users
+                    ? ProvinceDistrictDropdown()  // Display drop down menu for signed-in users
                     : _buildSignInPrompt(),   // Prompt for sign-in if not signed in
               ),
             ],
@@ -49,32 +50,32 @@ class _TrackingScreenState extends State<TrackingScreen> {
     );
   }
 
-  // Updated content for signed-in users
-  Widget _buildTrackingContent() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Live tracking coming soon!',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          SizedBox(height: 20),
-          Text(
-            'Stay tuned for updates.',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // // Updated content for signed-in users
+  // Widget _buildTrackingContent() {
+  //   return Center(
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         Text(
+  //           'Live tracking coming soon!',
+  //           style: TextStyle(
+  //             fontSize: 20,
+  //             fontWeight: FontWeight.bold,
+  //             color: Colors.black,
+  //           ),
+  //         ),
+  //         SizedBox(height: 20),
+  //         Text(
+  //           'Stay tuned for updates.',
+  //           style: TextStyle(
+  //             fontSize: 16,
+  //             color: Colors.grey[600],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   // Sign-in prompt if the user is not logged in
   Widget _buildSignInPrompt() {

@@ -67,9 +67,12 @@ flutter_native_splash:
   web: false
   android_gravity: center # Center the logo for Android devices
   ios_content_mode: center # Center the logo for iOS devices
+  background_image: null
+  padding: "50%"
 
 flutter_icons:
   android: true
   ios: true
   background_color: "#FFFFFF"
   image_path: "assets/images/logo.png"
+  padding: "5%"
