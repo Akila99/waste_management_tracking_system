@@ -491,7 +491,7 @@ class _MapScreenState extends State<MapScreen> {
             binId: binId,
             routeId: routeId,
             collectionPointId: collectionPointId,
-            updatedData: {"status": "Full"},
+            updatedData: {"status": "Empty"},
           );
         }
       } else {
