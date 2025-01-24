@@ -183,7 +183,6 @@ class _ProvinceDistrictDropdownState extends State<ProvinceDistrictDropdown> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
