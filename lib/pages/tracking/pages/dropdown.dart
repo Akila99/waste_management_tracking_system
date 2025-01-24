@@ -678,7 +678,6 @@ class _ProvinceDistrictDropdownState extends State<ProvinceDistrictDropdown> {
       ),
     );
   }
-
 }
 
 

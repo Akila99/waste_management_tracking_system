@@ -390,21 +390,6 @@ class _MapScreenState extends State<MapScreen> {
       // double adjustedBearing = (bearing ?? 0) + 20 % 360;
       double adjustedBearing = (bearing ?? 0);
 
-      // // Update marker position and rotation
-      // if (mounted) {
-      //   setState(() {
-      //     _markers.removeWhere((m) => m.markerId.value == truckId);
-      //     _markers.add(
-      //       Marker(
-      //         markerId: MarkerId(truckId),
-      //         position: currentPoint,
-      //         icon: truckIcon,
-      //         rotation: adjustedBearing, // Rotate truck marker to match heading
-      //         anchor: const Offset(0.5, 0.5),
-      //       ),
-      //     );
-      //   });
-      // }
       // Check if the marker with truckId exists in the _markers set
       print('Checking if marker exists for truckId: $truckId');
       bool markerExists = _markers.any((marker) => marker.markerId.value == truckId);
@@ -503,130 +488,6 @@ class _MapScreenState extends State<MapScreen> {
     print("Reached last point: ${route.last}");
   }
 
-  // double calculateBearing(LatLng start, LatLng end) {
-  //   double startLat = start.latitude * (math.pi / 180);
-  //   double startLng = start.longitude * (math.pi / 180);
-  //   double endLat = end.latitude * (math.pi / 180);
-  //   double endLng = end.longitude * (math.pi / 180);
-  //
-  //   double deltaLng = endLng - startLng;
-  //
-  //   double x = math.sin(deltaLng) * math.cos(endLat);
-  //   double y = math.cos(startLat) * math.sin(endLat) -
-  //       math.sin(startLat) * math.cos(endLat) * math.cos(deltaLng);
-  //
-  //   double bearing = math.atan2(x, y) * (180 / math.pi);
-  //   return (bearing + 360) % 360; // Normalize to 0-360 degrees
-  // }
-  //
-  // /// Calculates the shortest angle for smooth rotation
-  // double shortestAngle(double from, double to) {
-  //   double difference = (to - from + 360) % 360;
-  //   if (difference > 180) {
-  //     difference -= 360;
-  //   }
-  //   return difference;
-  // }
-  //
-  // double lerp(double start, double end, double t) {
-  //   return start + (end - start) * t;
-  // }
-  //
-  // void _animateTruckMovement(String truckId, List<LatLng> route) async {
-  //   BitmapDescriptor truckIcon = await _getTruckIcon();
-  //
-  //   print('Route Length: ${route.length}');
-  //
-  //   for (int i = 0; i < route.length; i++) {
-  //     LatLng currentPoint = route[i];
-  //     LatLng? nextPoint = i < route.length - 1 ? route[i + 1] : null;
-  //     double? bearing = nextPoint != null ? calculateBearing(currentPoint, nextPoint) : null;
-  //
-  //     // Ensure widget is still mounted
-  //     if (!mounted) return;
-  //
-  //     double adjustedBearing = (bearing ?? 0);
-  //
-  //     setState(() {
-  //       bool markerExists = _markers.any((marker) => marker.markerId.value == truckId);
-  //
-  //       if (markerExists) {
-  //         _markers = _markers.map((marker) {
-  //           if (marker.markerId.value == truckId) {
-  //             double currentBearing = marker.rotation;
-  //             double targetBearing = adjustedBearing;
-  //
-  //             // In your loop
-  //             double smoothedBearing = lerp(currentBearing, targetBearing, 0.1); // Adjust the t value for smoother transitions
-  //
-  //
-  //             return marker.copyWith(
-  //               positionParam: currentPoint,
-  //               iconParam: truckIcon,
-  //               rotationParam: smoothedBearing,
-  //             );
-  //           }
-  //           return marker;
-  //         }).toSet();
-  //       } else {
-  //         _markers.add(
-  //           Marker(
-  //             markerId: MarkerId(truckId),
-  //             position: currentPoint,
-  //             icon: truckIcon,
-  //             rotation: adjustedBearing,
-  //             anchor: Offset(0.5, 0.5),
-  //           ),
-  //         );
-  //       }
-  //     });
-  //
-  //     // Animate camera to follow the truck and rotate with its direction
-  //     googleMapController.animateCamera(
-  //       CameraUpdate.newCameraPosition(
-  //         CameraPosition(
-  //           target: currentPoint,
-  //           zoom: 17,
-  //           bearing: adjustedBearing, // Align map bearing with truck direction
-  //           tilt: 45, // Optional tilt for better visualization
-  //         ),
-  //       ),
-  //     );
-  //
-  //     print('Current Point: $currentPoint, Adjusted Bearing: $adjustedBearing');
-  //
-  //     // Simulate stop or movement delay
-  //     if (_binTrackLocations.any((bin) =>
-  //     bin['latitude'] == currentPoint.latitude &&
-  //         bin['longitude'] == currentPoint.longitude)) {
-  //       print("Updating database for stop point");
-  //       await Future.delayed(const Duration(seconds: 3)); // Stop for 3 seconds
-  //       if (binToUpdate.isNotEmpty) {
-  //         var binId = binToUpdate['bin_id'];
-  //         var routeId = binToUpdate['route_id'];
-  //         var collectionPointId = binToUpdate['collection_point_id'];
-  //
-  //         // Update truck status to "empty"
-  //         await _truckService.updateTruckDetails(
-  //           truckId: truckId,
-  //           binId: binId,
-  //           routeId: routeId,
-  //           collectionPointId: collectionPointId,
-  //           updatedData: {"status": "Empty"},
-  //         );
-  //       }
-  //     } else {
-  //       await Future.delayed(const Duration(seconds: 1)); // Movement delay
-  //     }
-  //   }
-  //
-  //   print("Reached last point: ${route.last}");
-  // }
-
-
-
-
-
   void _startTruckRoute() async {
 
     for (var truckRoute in _truckRoutes) {
@@ -636,7 +497,6 @@ class _MapScreenState extends State<MapScreen> {
       _animateTruckMovement(truckId, route);
     }
   }
-
 
   Future<BitmapDescriptor> _getTruckIcon() async {
     return await BitmapDescriptor.asset(
