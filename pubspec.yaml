@@ -65,10 +65,8 @@ flutter_native_splash:
   android: true
   ios: true
   web: false
-  android_gravity: center # Center the logo for Android devices
-  ios_content_mode: center # Center the logo for iOS devices
-  background_image: null
-  padding: "50%"
+  android_gravity: fill # Options: center, top, bottom, fill, etc.
+  ios_content_mode: scaleAspectFill # Options: scaleAspectFit, scaleAspectFill, center, etc.
 
 flutter_icons:
   android: true
