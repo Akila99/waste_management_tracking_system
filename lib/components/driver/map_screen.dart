@@ -99,22 +99,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  // void _extractWardDetails() {
-  //   wardName = widget.wardDetails['ward_name'] ?? "Unknown Ward";
-  //
-  //   if (widget.wardDetails['boundary'] != null &&
-  //       widget.wardDetails['boundary']['coordinates'] != null) {
-  //     final List<dynamic> coordinates = widget.wardDetails['boundary']['coordinates'];
-  //
-  //     wardCoordinates = coordinates.map((coord) {
-  //       if (coord is GeoPoint) {
-  //         return LatLng(coord.latitude, coord.longitude);
-  //       } else {
-  //         return LatLng(0.0, 0.0);
-  //       }
-  //     }).toList();
-  //   }
-  // }
 
   void _loadBinData() {
     try {
@@ -380,7 +364,7 @@ class _MapScreenState extends State<MapScreen> {
     try {
       return await BitmapDescriptor.asset(
         const ImageConfiguration(size: Size(60, 60)),
-        'assets/images/truck.png',
+        'assets/images/truck1.png',
       );
     } catch (e) {
       debugPrint("Error in _getTruckIcon: $e");
@@ -403,23 +387,18 @@ class _MapScreenState extends State<MapScreen> {
               googleMapController = controller;
               googleMapController.setMapStyle(_mapStyle);
             },
-
-
             initialCameraPosition: CameraPosition(
               target: wardCoordinates.isNotEmpty
                   ? wardCoordinates.first
                   : _defaultCenter,
               zoom: 17.0,
-
             ),
-
             myLocationEnabled: true, // Disables the blue dot location
             myLocationButtonEnabled: false,
             zoomControlsEnabled: true,
             circles: circles,
             markers: _markers,
             polygons: polygons,
-
           ),
           // Positioned button here
           Positioned(
@@ -433,7 +412,6 @@ class _MapScreenState extends State<MapScreen> {
                     debugPrint("Location services are disabled.");
                     return;
                   }
-
                   Position position = await Geolocator.getCurrentPosition(
                     desiredAccuracy: LocationAccuracy.high,
                   );

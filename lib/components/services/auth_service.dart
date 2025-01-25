@@ -327,7 +327,7 @@ class AuthService {
 
   // Google Sign-In configuration
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual client ID
+    clientId: '292559066781-1s0g14fha7tlvjo23a05bci5e7uu57k5.apps.googleusercontent.com', // Replace with your actual client ID
     scopes: ['email', 'profile'],
   );
 

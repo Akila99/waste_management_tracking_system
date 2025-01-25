@@ -385,7 +385,7 @@ class MoreScreen extends StatelessWidget {
             children: [
               MoreOption(icon: Icons.settings, label: 'Settings', isSelected: initialLabel == 'Settings'),
               MoreOption(icon: Icons.privacy_tip, label: 'Privacy Policy', isSelected: initialLabel == 'Privacy Policy'),
-              MoreOption(icon: Icons.description, label: 'Terms and Conditions', isSelected: initialLabel == 'Terms and Conditions'),
+              MoreOption(icon: Icons.description, label: 'T & C', isSelected: initialLabel == 'Terms and Conditions'),
               MoreOption(icon: Icons.help_outline, label: 'FAQ', isSelected: initialLabel == 'FAQ'),
               MoreOption(icon: Icons.info, label: 'About Us', isSelected: initialLabel == 'About Us'),
 
@@ -505,7 +505,7 @@ class _MoreOptionState extends State<MoreOption> {
         );
       case 'Privacy Policy':
         return Text('1. We collect user data to improve the app.\n2. Your data is kept secure.\n3. No data is shared with third parties.\n4. You can request to delete your data.\n5. Usage data is collected for analytics.');
-      case 'Terms and Conditions':
+      case 'T & C':
         return Text('1. Use the app responsibly.\n2. Do not misuse services.\n3. We reserve the right to modify these terms.\n4. Accounts violating terms will be suspended.\n5. Intellectual property belongs to WasteTrack.');
       case 'FAQ':
         return Text('1. Q: How do I track waste collection?\n   A: Use the Tracking feature.\n\n'
@@ -644,7 +644,7 @@ class _MoreOptionState extends State<MoreOption> {
     final bool isSpecialButton = [
       'Settings',
       'Privacy Policy',
-      'Terms and Conditions',
+      'T & C',
       'FAQ',
       'About Us',
       'Feedback',
