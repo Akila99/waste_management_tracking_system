@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.waste_management_tracking">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -12,7 +13,8 @@
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="12451000"
+            tools:replace="android:value" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
