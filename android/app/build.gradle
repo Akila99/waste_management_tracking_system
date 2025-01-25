@@ -1,9 +1,23 @@
-plugins {
+/*plugins {
     id "com.android.application"
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
     id 'com.google.gms.google-services'
+}
+
+// Read the keystore properties without using Java imports
+def keystorePropertiesFile = rootProject.file("release-key.jks")
+def keystoreProperties = [:]
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        reader.eachLine { line ->
+            def keyValue = line.split('=')
+            if (keyValue.length == 2) {
+                keystoreProperties[keyValue[0].trim()] = keyValue[1].trim()
+            }
+        }
+    }
 }
 
 android {
@@ -28,11 +42,96 @@ android {
         versionName flutter.versionName
     }
 
+    signingConfigs {
+        release {
+            storeFile file('release-key,jks')
+            // Path to your keystore file
+            storePassword 'WmTs2501!'  // Keystore password
+            keyAlias 'TruckWaste'  // Key alias
+            keyPassword 'WmTs2501!'  // Key password
+
+        }
+    }
+
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            minifyEnabled true // Enable ProGuard
+            shrinkResources true // Remove unused resources
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+
+}
+
+
+flutter {
+    source = "../.."
+}
+
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+    implementation 'com.google.firebase:firebase-appcheck-debug'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+}*/
+
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
+}
+
+// Read the keystore properties (Optional: Add a keystore.properties file for security)
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = [:]
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
+}
+
+android {
+    ndkVersion = "28.0.12674087"
+    namespace = "com.example.waste_management_tracking"
+    compileSdk = flutter.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId "com.example.waste_management_tracking"
+        minSdkVersion 29
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutter.versionCode
+        versionName flutter.versionName
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\theja\\OneDrive\\Desktop\\Degree\\3rd year\\3rd sem\\applied_project\\waste_management_tracking_system\\android\\app\\release-key.jks\'') // Corrected the file path
+            storePassword keystoreProperties['storePassword'] ?: 'WmTs2501!' // Safely read from keystore.properties
+            keyAlias keystoreProperties['keyAlias'] ?: 'TruckWaste'
+            keyPassword keystoreProperties['keyPassword'] ?: 'WmTs2501!'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false // For simplicity, disable ProGuard
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig null
         }
     }
 }
@@ -47,3 +146,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
 }
+

@@ -7,6 +7,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';  // Import Firebase Remote Config
 import 'package:package_info_plus/package_info_plus.dart';  // To get the current app version
 import 'services/remote_config_manager.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,18 +17,34 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Activate Firebase App Check
+  await _initializeAppCheck();
+
+  // Run the app
+  runApp(WasteManagementApp());
+}
+
+
+  // Function to initialize Firebase App Check
+Future<void> _initializeAppCheck() async {
   try {
     await FirebaseAppCheck.instance.activate(
-      webProvider: ReCaptchaV3Provider('6LeXXLUqAAAAAAoEMdZjKT0Ub1xbZFcEHK184d9m'),
-      androidProvider: kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
+      webProvider: ReCaptchaV3Provider(
+          '6LeXXLUqAAAAAAoEMdZjKT0Ub1xbZFcEHK184d9m'),
+      androidProvider: kDebugMode ? AndroidProvider.debug : AndroidProvider
+          .playIntegrity,
       appleProvider: AppleProvider.appAttest,
     );
+    debugPrint('Firebase App Check activated successfully.');
+    // Enable automatic token refresh
+    await FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
+    debugPrint('App Check token auto-refresh enabled.');
   } catch (e) {
     print('Failed to activate App Check: $e');
   }
-
-  runApp(WasteManagementApp());
 }
+//   runApp(WasteManagementApp());
+// }
 
 class WasteManagementApp extends StatefulWidget {
   @override
