@@ -8,6 +8,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:292559066781:android:86ad196a582b55c60d2674",
+        "android_client_info": {
+          "package_name": "com.example.live_tracking_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292559066781-1s0g14fha7tlvjo23a05bci5e7uu57k5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbsSHZjAU3ra4QIkE6a1mboeWRj7Kq6KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292559066781-1s0g14fha7tlvjo23a05bci5e7uu57k5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "292559066781-0fon4l3dcpot286bebo96a1gpuhk3a89.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wastet"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:292559066781:android:41183651be8228eb0d2674",
         "android_client_info": {
           "package_name": "com.example.waste_management_tracking"
@@ -20,6 +56,14 @@
           "android_info": {
             "package_name": "com.example.waste_management_tracking",
             "certificate_hash": "6f65bf4ce685882e6e74eb056909494aa437f077"
+          }
+        },
+        {
+          "client_id": "292559066781-go5u54rg8to5amh1diqn416iid1lu8ma.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.waste_management_tracking",
+            "certificate_hash": "0906a2d661efc789b653e8d770f3d6ee05e33fb9"
           }
         },
         {
@@ -38,6 +82,13 @@
             {
               "client_id": "292559066781-1s0g14fha7tlvjo23a05bci5e7uu57k5.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "292559066781-0fon4l3dcpot286bebo96a1gpuhk3a89.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wastet"
+              }
             }
           ]
         }
