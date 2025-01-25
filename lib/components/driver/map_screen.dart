@@ -99,22 +99,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  // void _extractWardDetails() {
-  //   wardName = widget.wardDetails['ward_name'] ?? "Unknown Ward";
-  //
-  //   if (widget.wardDetails['boundary'] != null &&
-  //       widget.wardDetails['boundary']['coordinates'] != null) {
-  //     final List<dynamic> coordinates = widget.wardDetails['boundary']['coordinates'];
-  //
-  //     wardCoordinates = coordinates.map((coord) {
-  //       if (coord is GeoPoint) {
-  //         return LatLng(coord.latitude, coord.longitude);
-  //       } else {
-  //         return LatLng(0.0, 0.0);
-  //       }
-  //     }).toList();
-  //   }
-  // }
 
   void _loadBinData() {
     try {

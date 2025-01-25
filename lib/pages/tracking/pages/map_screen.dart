@@ -1,340 +1,217 @@
-import 'dart:async';
-import 'dart:collection';
-import 'dart:ui';
-import 'dart:math' as math;
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:image/image.dart' as img;
-import 'package:waste_management_tracking/pages/tracking/classes/bin_service.dart';
-import 'package:waste_management_tracking/pages/tracking/classes/truck_service.dart';
-// import 'package:custom_info_window/custom_info_window.dart';
+  import 'dart:async';
+  import 'dart:collection';
+  import 'dart:ui';
+  import 'dart:math' as math;
+  import 'package:flutter/material.dart';
+  import 'package:google_maps_flutter/google_maps_flutter.dart';
+  import 'package:cloud_firestore/cloud_firestore.dart';
+  import 'package:flutter/services.dart';
+  import 'package:image/image.dart' as img;
+  import 'package:waste_management_tracking/pages/tracking/classes/bin_service.dart';
+  import 'package:waste_management_tracking/pages/tracking/classes/truck_service.dart';
+  // import 'package:custom_info_window/custom_info_window.dart';
 
 
 
-class MapScreen extends StatefulWidget {
-  final Map<String, dynamic> wardDetails;
-  final String provinceId;
-  final String districtId;
-  final String councilId;
+  class MapScreen extends StatefulWidget {
+    final Map<String, dynamic> wardDetails;
+    final String provinceId;
+    final String districtId;
+    final String councilId;
 
-  const MapScreen({
-    required this.wardDetails,
-    required this.provinceId,
-    required this.districtId,
-    required this.councilId,
-    Key? key,
-  }) : super(key: key);
+    const MapScreen({
+      required this.wardDetails,
+      required this.provinceId,
+      required this.districtId,
+      required this.councilId,
+      Key? key,
+    }) : super(key: key);
 
-  @override
-  State<MapScreen> createState() => _MapScreenState();
-}
-
-class _MapScreenState extends State<MapScreen> {
-  final LatLng _defaultCenter = const LatLng(6.879385, 79.859828);
-  late String _mapStyle = '';
-  bool _isStyleLoaded = false;
-  late GoogleMapController googleMapController;
-  Set<Marker> _markers = {};
-  Set<Marker> markers = {};
-  Set<Polygon> polygons = HashSet<Polygon>();
-  List<LatLng> wardCoordinates = [];
-  String wardName = "Ward Map";
-  LatLng? _truckLocation;
-  final List<Map<String, dynamic>> _binLocations = [];
-  final List<Map<String, dynamic>> _binTrackLocations = [];
-  final List<Map<String, dynamic>> _truckRoutes = [];
-
-  final TruckService _truckService = TruckService();
-  final BinDataLoader _binDataLoader = BinDataLoader();
-  List<StreamSubscription> subscriptions = [];
-
-
-
-  @override
-  void initState() {
-    super.initState();
-    _loadMapStyle();
-    _extractWardDetails();
-    _loadBinData(widget.provinceId, widget.districtId, widget.councilId);
-    _loadTruckData(widget.provinceId, widget.districtId, widget.councilId);
-
-    // _listenToDriverLocation(widget.provinceId, widget.districtId, widget.councilId);
-
+    @override
+    State<MapScreen> createState() => _MapScreenState();
   }
 
-  @override
-  void dispose() {
-    // Cancel all subscriptions when the widget is disposed
-    for (var subscription in subscriptions) {
-      subscription.cancel();
+  class _MapScreenState extends State<MapScreen> {
+    final LatLng _defaultCenter = const LatLng(6.879385, 79.859828);
+    late String _mapStyle = '';
+    bool _isStyleLoaded = false;
+    late GoogleMapController googleMapController;
+    Set<Marker> _markers = {};
+    Set<Marker> markers = {};
+    Set<Polygon> polygons = HashSet<Polygon>();
+    List<LatLng> wardCoordinates = [];
+    String wardName = "Ward Map";
+    LatLng? _truckLocation;
+    final List<Map<String, dynamic>> _binLocations = [];
+    final List<Map<String, dynamic>> _binTrackLocations = [];
+    final List<Map<String, dynamic>> _truckRoutes = [];
+
+    final TruckService _truckService = TruckService();
+    final BinDataLoader _binDataLoader = BinDataLoader();
+    List<StreamSubscription> subscriptions = [];
+    bool _isStylelLoaded = false;
+    bool _isLoading = true; // State to control loading indicator
+
+
+
+    @override
+    void initState() {
+      super.initState();
+      _loadMapStyle();
+      _extractWardDetails();
+      _loadBinData(widget.provinceId, widget.districtId, widget.councilId);
+      _loadTruckData(widget.provinceId, widget.districtId, widget.councilId);
+
+      // _listenToDriverLocation(widget.provinceId, widget.districtId, widget.councilId);
+
     }
-    super.dispose();
-  }
 
-  void _loadMapStyle() async {
-    try {
-      _mapStyle = await DefaultAssetBundle.of(context)
-          .loadString('map_theme/retro_theme.json');
-      setState(() {
-        _isStyleLoaded = true;
-      });
-    } catch (e) {
-      debugPrint("Error loading map style: $e");
-    }
-  }
-
-  void _extractWardDetails() {
-    wardName = widget.wardDetails['ward_name'] ?? "Unknown Ward";
-
-    if (widget.wardDetails['boundary'] != null &&
-        widget.wardDetails['boundary']['coordinates'] != null) {
-      final List<dynamic> coordinates =
-      widget.wardDetails['boundary']['coordinates'];
-
-      wardCoordinates = coordinates.map((coord) {
-        if (coord is GeoPoint) {
-          return LatLng(coord.latitude, coord.longitude);
-        } else {
-          return const LatLng(0.0, 0.0);
-        }
-      }).toList();
-    }
-  }
-
-  void _loadBinData(String provinceId, String districtId, String councilId) {
-    try {
-      _binDataLoader
-          .fetchBinDetailsRealtime(wardName, provinceId, districtId, councilId, mounted)
-          .listen((truckDetails) async {
-        if (truckDetails.isNotEmpty && mounted) {
-          // Pass truck details to _loadBinData to extract bin data
-          await _loadBinDataRealtime(truckDetails); // Extract bin data
-        }
-      });
-    } catch (e) {
-      debugPrint("Error loading truck details: $e");
-    }
-  }
-
-
-  Future<void> _loadTruckData(String provinceId, String districtId, String councilId) async {
-    try {
-      // Fetch truck details once
-      final truckDetails =
-      await _truckService.fetchTruckDetails(wardName, provinceId, districtId, councilId);
-
-      if (truckDetails.isNotEmpty && mounted) {
-        // Pass truck details to _loadTruckMovements to extract bin data
-        await _loadTruckMovements(truckDetails);
+    @override
+    void dispose() {
+      // Cancel all subscriptions when the widget is disposed
+      for (var subscription in subscriptions) {
+        subscription.cancel();
       }
-    } catch (e) {
-      debugPrint("Error loading truck details: $e");
+      super.dispose();
     }
-  }
 
+    void _loadMapStyle() async {
+      try {
+        _mapStyle = await DefaultAssetBundle.of(context)
+            .loadString('map_theme/retro_theme.json');
+        setState(() {
+          _isStyleLoaded = true;
+        });
+      } catch (e) {
+        debugPrint("Error loading map style: $e");
+      }
+    }
 
-  Future<void> _loadBinDataRealtime(List<Map<String, dynamic>> truckDetails) async {
-    // Clear existing bin locations before loading new data
-    _binLocations.clear();
+    void _extractWardDetails() {
+      wardName = widget.wardDetails['ward_name'] ?? "Unknown Ward";
 
-    for (var truck in truckDetails) {
-      var schedule = truck['schedule'];
+      if (widget.wardDetails['boundary'] != null &&
+          widget.wardDetails['boundary']['coordinates'] != null) {
+        final List<dynamic> coordinates =
+        widget.wardDetails['boundary']['coordinates'];
 
-      if (schedule != null) {
-        var nonRecycling = schedule['non_recycling'];
-        if (nonRecycling != null && nonRecycling.isNotEmpty) {
-          for (var nonRecyclingMap in nonRecycling) {
-            var mondayReferenceData = nonRecyclingMap['Monday_reference_data'];
-
-            if (mondayReferenceData != null && mondayReferenceData is Map<String, dynamic>) {
-              var collectionPointRefs = mondayReferenceData['collection_point_ref'];
-
-              if (collectionPointRefs is List) {
-                for (var collectionPointRef in collectionPointRefs) {
-                  if (collectionPointRef is DocumentReference) {
-                    // Listen to real-time updates for the collection point
-                    var subscription = collectionPointRef.snapshots().listen((collectionPointSnapshot) async {
-                      if (collectionPointSnapshot.exists) {
-                        var collectionPointData = collectionPointSnapshot.data();
-
-                        if (collectionPointData is Map<String, dynamic>) {
-                          String roadName = collectionPointData['road_name'] ?? 'Unknown';
-                          var binLocationRef = collectionPointRef.collection('bin locations');
-
-                          // Listen for updates in 'bin locations'
-                          var binSubscription = binLocationRef.snapshots().listen((binLocationSnapshot) {
-                            List<Map<String, dynamic>> updatedBinLocations = [];
-
-                            for (var doc in binLocationSnapshot.docs) {
-                              var binLocationData = doc.data();
-                              var location = binLocationData['location'];
-
-                              if (location != null && location is GeoPoint) {
-                                double latitude = location.latitude;
-                                double longitude = location.longitude;
-
-                                updatedBinLocations.add({
-                                  'latitude': latitude,
-                                  'longitude': longitude,
-                                  'status': binLocationData['status'],
-                                  'road_name': roadName,
-                                  'bin_id': binLocationData['bin_id'],
-                                });
-                              } else {
-                                print('Location is not a valid GeoPoint');
-                              }
-                            }
-
-                            // Ensure setState is called only when the widget is mounted
-                            if (mounted) {
-                              setState(() {
-                                for (var bin in updatedBinLocations) {
-                                  // Remove old entry with the same bin_id
-                                  _binLocations.removeWhere((existing) =>
-                                  existing['bin_id'] == bin['bin_id']);
-                                  // Add updated bin
-                                  _binLocations.add(bin);
-                                }
-                              });
-
-                              // Add markers after state update
-                              _addBinMarkers(_binLocations);
-                            }
-                          });
-
-                          subscriptions.add(binSubscription);
-                        }
-                      }
-                    });
-
-                    subscriptions.add(subscription);
-                  }
-                }
-              }
-            }
+        wardCoordinates = coordinates.map((coord) {
+          if (coord is GeoPoint) {
+            return LatLng(coord.latitude, coord.longitude);
+          } else {
+            return const LatLng(0.0, 0.0);
           }
-        }
+        }).toList();
       }
     }
-  }
 
-
-
-  void _addBinMarkers(List<Map<String, dynamic>> binData) async {
-    Set<Marker> binMarkers = {};
-    BitmapDescriptor binIcon = await _getBinIcon();
-
-    for (var bin in binData) {
-      Marker binMarker = Marker(
-        markerId: MarkerId(bin['bin_id']),
-        position: LatLng(bin['latitude'], bin['longitude']),
-        icon: binIcon,
-        infoWindow: InfoWindow(
-          title: 'Road: ${bin['road_name']} ',
-          snippet: 'Status: ${bin['status']}- Bin ID: ${bin['bin_id']}',
-
-        ),
-      );
-
-      binMarkers.add(binMarker);
+    void _loadBinData(String provinceId, String districtId, String councilId) {
+      try {
+        _binDataLoader
+            .fetchBinDetailsRealtime(wardName, provinceId, districtId, councilId, mounted)
+            .listen((truckDetails) async {
+          if (truckDetails.isNotEmpty && mounted) {
+            // Pass truck details to _loadBinData to extract bin data
+            await _loadBinDataRealtime(truckDetails); // Extract bin data
+          }
+        });
+      } catch (e) {
+        debugPrint("Error loading truck details: $e");
+      }
     }
 
-    if (mounted) {
-      setState(() {
-        _markers = binMarkers; // Replace existing markers with new ones
-      });
+
+    Future<void> _loadTruckData(String provinceId, String districtId, String councilId) async {
+      try {
+        // Fetch truck details once
+        final truckDetails =
+        await _truckService.fetchTruckDetails(wardName, provinceId, districtId, councilId);
+
+        if (truckDetails.isNotEmpty && mounted) {
+          // Pass truck details to _loadTruckMovements to extract bin data
+          await _loadTruckMovements(truckDetails);
+        }
+      } catch (e) {
+        debugPrint("Error loading truck details: $e");
+      }
     }
-  }
 
 
-  Future<BitmapDescriptor> _getBinIcon() async {
-    final ByteData data = await rootBundle.load('assets/images/bin_icon1.png');
-    final Uint8List bytes = data.buffer.asUint8List();
+    Future<void> _loadBinDataRealtime(List<Map<String, dynamic>> truckDetails) async {
+      // Clear existing bin locations before loading new data
+      _binLocations.clear();
 
-    final img.Image image = img.decodeImage(Uint8List.fromList(bytes))!;
-    final img.Image resized = img.copyResize(image, width: 35, height: 35);
-    final Uint8List resizedBytes = Uint8List.fromList(img.encodePng(resized));
+      for (var truck in truckDetails) {
+        var schedule = truck['schedule'];
 
-    return BitmapDescriptor.bytes(resizedBytes);
-  }
+        if (schedule != null) {
+          var nonRecycling = schedule['non_recycling'];
+          if (nonRecycling != null && nonRecycling.isNotEmpty) {
+            for (var nonRecyclingMap in nonRecycling) {
+              var mondayReferenceData = nonRecyclingMap['Monday_reference_data'];
 
+              if (mondayReferenceData != null && mondayReferenceData is Map<String, dynamic>) {
+                var collectionPointRefs = mondayReferenceData['collection_point_ref'];
 
+                if (collectionPointRefs is List) {
+                  for (var collectionPointRef in collectionPointRefs) {
+                    if (collectionPointRef is DocumentReference) {
+                      // Listen to real-time updates for the collection point
+                      var subscription = collectionPointRef.snapshots().listen((collectionPointSnapshot) async {
+                        if (collectionPointSnapshot.exists) {
+                          var collectionPointData = collectionPointSnapshot.data();
 
-  Future<void> _loadTruckMovements(List<Map<String, dynamic>> truckDetails) async {
-    for (var truck in truckDetails) {
-      var truckId = truck['truck_id'];
-      var schedule = truck['schedule'];
+                          if (collectionPointData is Map<String, dynamic>) {
+                            String roadName = collectionPointData['road_name'] ?? 'Unknown';
+                            var binLocationRef = collectionPointRef.collection('bin locations');
 
-      if (schedule != null) {
-        var nonRecycling = schedule['non_recycling'];
-        if (nonRecycling != null && nonRecycling.isNotEmpty) {
-          for (var nonRecyclingMap in nonRecycling) {
-            var mondayReferenceData = nonRecyclingMap['Monday_reference_data'];
+                            // Listen for updates in 'bin locations'
+                            var binSubscription = binLocationRef.snapshots().listen((binLocationSnapshot) {
+                              List<Map<String, dynamic>> updatedBinLocations = [];
 
-            if (mondayReferenceData != null &&
-                mondayReferenceData is Map<String, dynamic>) {
-              // Fetch route_geopoints once
-              List<
-                  dynamic>? routeGeopoints = mondayReferenceData['route_geopoints'] as List<
-                  dynamic>?;
-              if (routeGeopoints != null && mounted) {
-                setState(() {
-                  _truckRoutes.add({
-                    'id': truckId,
-                    'route': routeGeopoints.map((dynamic item) {
-                      if (item is GeoPoint) {
-                        return LatLng(item.latitude, item.longitude);
-                      }
-                      return const LatLng(0.0,
-                          0.0); // Handle invalid data gracefully
-                    }).toList(),
-                    'route_id': mondayReferenceData['route_id'],
-                  });
-                });
-              }
+                              for (var doc in binLocationSnapshot.docs) {
+                                var binLocationData = doc.data();
+                                var location = binLocationData['location'];
 
-              // Fetch bin locations (not in real-time)
-              var collectionPointRefs = mondayReferenceData['collection_point_ref'];
-              if (collectionPointRefs is List) {
-                for (var collectionPointRef in collectionPointRefs) {
-                  if (collectionPointRef is DocumentReference) {
-                    try {
-                      var collectionPointSnapshot = await collectionPointRef
-                          .get();
-                      if (collectionPointSnapshot.exists) {
-                        var collectionPointData = collectionPointSnapshot
-                            .data();
-                        if (collectionPointData is Map<String, dynamic>) {
-                          var collectionPointId = collectionPointData['road_name'];
+                                if (location != null && location is GeoPoint) {
+                                  double latitude = location.latitude;
+                                  double longitude = location.longitude;
 
-                          // Fetch bin locations under this collection point
-                          var binLocationRef = collectionPointRef.collection(
-                              'bin locations');
-                          var binLocationSnapshot = await binLocationRef.get();
-                          for (var doc in binLocationSnapshot.docs) {
-                            var binLocationData = doc.data();
-                            var location = binLocationData['location'];
-                            if (location != null && location is GeoPoint &&
-                                mounted) {
-                              setState(() {
-                                _binTrackLocations.add({
-                                  'latitude': location.latitude,
-                                  'longitude': location.longitude,
-                                  'status': binLocationData['status'],
-                                  'bin_id': binLocationData['bin_id'],
-                                  'route_id': mondayReferenceData['route_id'],
-                                  'collection_point_id': collectionPointId,
+                                  updatedBinLocations.add({
+                                    'latitude': latitude,
+                                    'longitude': longitude,
+                                    'status': binLocationData['status'],
+                                    'road_name': roadName,
+                                    'bin_id': binLocationData['bin_id'],
+                                  });
+                                } else {
+                                  print('Location is not a valid GeoPoint');
+                                }
+                              }
+
+                              // Ensure setState is called only when the widget is mounted
+                              if (mounted) {
+                                setState(() {
+                                  for (var bin in updatedBinLocations) {
+                                    // Remove old entry with the same bin_id
+                                    _binLocations.removeWhere((existing) =>
+                                    existing['bin_id'] == bin['bin_id']);
+                                    // Add updated bin
+                                    _binLocations.add(bin);
+                                  }
                                 });
-                              });
-                            }
+
+                                // Add markers after state update
+                                _addBinMarkers(_binLocations);
+                              }
+                            });
+
+                            subscriptions.add(binSubscription);
                           }
                         }
-                      }
-                    } catch (e) {
-                      // Handle any errors (e.g., network issues)
-                      print('Error fetching data: $e');
+                      });
+
+                      subscriptions.add(subscription);
                     }
                   }
                 }
@@ -343,191 +220,352 @@ class _MapScreenState extends State<MapScreen> {
           }
         }
       }
+
     }
-    _startTruckRoute();
-  }
 
 
-  double calculateBearing(LatLng start, LatLng end) {
-    double startLat = start.latitude * (math.pi / 180);
-    double startLng = start.longitude * (math.pi / 180);
-    double endLat = end.latitude * (math.pi / 180);
-    double endLng = end.longitude * (math.pi / 180);
 
-    double deltaLng = endLng - startLng;
+    void _addBinMarkers(List<Map<String, dynamic>> binData) async {
+      Set<Marker> binMarkers = {};
+      BitmapDescriptor binIcon = await _getBinIcon();
 
-    double x = math.sin(deltaLng) * math.cos(endLat);
-    double y = math.cos(startLat) * math.sin(endLat) -
-        math.sin(startLat) * math.cos(endLat) * math.cos(deltaLng);
+      for (var bin in binData) {
+        Marker binMarker = Marker(
+          markerId: MarkerId(bin['bin_id']),
+          position: LatLng(bin['latitude'], bin['longitude']),
+          icon: binIcon,
+          infoWindow: InfoWindow(
+            title: 'Road: ${bin['road_name']} ',
+            snippet: 'Status: ${bin['status']}- Bin ID: ${bin['bin_id']}',
 
-    double bearing = math.atan2(x, y) * (180 / math.pi);
-    return (bearing + 360) % 360; // Normalize to 0-360 degrees
-  }
+          ),
+        );
 
-  /// Calculates the shortest angle for smooth rotation
-  double shortestAngle(double from, double to) {
-    double difference = (to - from + 360) % 360;
-    if (difference > 180) {
-      difference -= 360;
-    }
-    return difference;
-  }
-
-
-  void _animateTruckMovement(String truckId, List<LatLng> route) async {
-    BitmapDescriptor truckIcon = await _getTruckIcon();
-
-    print('Route Length: ${route.length}');
-
-    for (int i = 0; i < route.length; i++) {
-      LatLng currentPoint = route[i];
-      LatLng? nextPoint = i < route.length - 1 ? route[i + 1] : null;
-      double? bearing = nextPoint != null ? calculateBearing(currentPoint, nextPoint) : null;
-      // Ensure that widget is still mounted before doing anything
-      if (!mounted) return; // Exit if widget is disposed
-
-      // // Adjust bearing for alignment
-      // double adjustedBearing = (bearing ?? 0) + 20 % 360;
-      double adjustedBearing = (bearing ?? 0);
-
-      // Check if the marker with truckId exists in the _markers set
-      print('Checking if marker exists for truckId: $truckId');
-      bool markerExists = _markers.any((marker) => marker.markerId.value == truckId);
-      print('Marker exists: $markerExists');
+        binMarkers.add(binMarker);
+      }
 
       if (mounted) {
         setState(() {
-          // Only update if the marker exists
-          if (markerExists) {
-            print('Updating marker: $truckId with icon and position');
-            _markers = _markers.map((marker) {
-              if (marker.markerId.value == truckId) {
-                double currentBearing = marker.rotation;
-                double targetBearing = adjustedBearing;
-
-                // Calculate smoothed bearing
-                double smoothedBearing = currentBearing +
-                    shortestAngle(currentBearing, targetBearing) * 0.05; // Adjust smoothness factor
-                return marker.copyWith(
-                  positionParam: currentPoint,
-                  iconParam: truckIcon,
-                  rotationParam: smoothedBearing,
-                );
-              }
-              return marker;
-            }).toSet();
-          } else {
-            print('Marker not found, adding a new marker: $truckId');
-            _markers.add(
-              Marker(
-                markerId: MarkerId(truckId),
-                position: currentPoint,
-                icon: truckIcon,
-                rotation: adjustedBearing,
-                anchor: const Offset(0.5, 0.5),
-              ),
-            );
-          }
+          _isLoading = false; // Set loading to false once data is loaded
+          _markers = binMarkers; // Replace existing markers with new ones
         });
       }
+    }
 
-      // Animate camera for every 3rd point to reduce jitter
-      if (i % 3 == 0) {
-        googleMapController.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: currentPoint,
-              zoom: 17, // Adjust zoom level as needed
-              bearing: bearing ?? 0, // Rotate the camera to align with the truck's heading
-              tilt: 45, // Tilt for a 3D perspective
-            ),
-          ),
-        );
+
+    Future<BitmapDescriptor> _getBinIcon() async {
+      final ByteData data = await rootBundle.load('assets/images/bin_icon1.png');
+      final Uint8List bytes = data.buffer.asUint8List();
+
+      final img.Image image = img.decodeImage(Uint8List.fromList(bytes))!;
+      final img.Image resized = img.copyResize(image, width: 35, height: 35);
+      final Uint8List resizedBytes = Uint8List.fromList(img.encodePng(resized));
+
+      return BitmapDescriptor.bytes(resizedBytes);
+    }
+
+
+
+    Future<void> _loadTruckMovements(List<Map<String, dynamic>> truckDetails) async {
+      for (var truck in truckDetails) {
+        var truckId = truck['truck_id'];
+        var schedule = truck['schedule'];
+
+        if (schedule != null) {
+          var nonRecycling = schedule['non_recycling'];
+          if (nonRecycling != null && nonRecycling.isNotEmpty) {
+            for (var nonRecyclingMap in nonRecycling) {
+              var mondayReferenceData = nonRecyclingMap['Monday_reference_data'];
+
+              if (mondayReferenceData != null &&
+                  mondayReferenceData is Map<String, dynamic>) {
+                // Fetch route_geopoints once
+                List<
+                    dynamic>? routeGeopoints = mondayReferenceData['route_geopoints'] as List<
+                    dynamic>?;
+                if (routeGeopoints != null && mounted) {
+                  setState(() {
+                    _truckRoutes.add({
+                      'id': truckId,
+                      'route': routeGeopoints.map((dynamic item) {
+                        if (item is GeoPoint) {
+                          return LatLng(item.latitude, item.longitude);
+                        }
+                        return const LatLng(0.0,
+                            0.0); // Handle invalid data gracefully
+                      }).toList(),
+                      'route_id': mondayReferenceData['route_id'],
+                    });
+                  });
+                }
+
+                // Fetch bin locations (not in real-time)
+                var collectionPointRefs = mondayReferenceData['collection_point_ref'];
+                if (collectionPointRefs is List) {
+                  for (var collectionPointRef in collectionPointRefs) {
+                    if (collectionPointRef is DocumentReference) {
+                      try {
+                        var collectionPointSnapshot = await collectionPointRef
+                            .get();
+                        if (collectionPointSnapshot.exists) {
+                          var collectionPointData = collectionPointSnapshot
+                              .data();
+                          if (collectionPointData is Map<String, dynamic>) {
+                            var collectionPointId = collectionPointData['road_name'];
+
+                            // Fetch bin locations under this collection point
+                            var binLocationRef = collectionPointRef.collection(
+                                'bin locations');
+                            var binLocationSnapshot = await binLocationRef.get();
+                            for (var doc in binLocationSnapshot.docs) {
+                              var binLocationData = doc.data();
+                              var location = binLocationData['location'];
+                              if (location != null && location is GeoPoint &&
+                                  mounted) {
+                                setState(() {
+                                  _binTrackLocations.add({
+                                    'latitude': location.latitude,
+                                    'longitude': location.longitude,
+                                    'status': binLocationData['status'],
+                                    'bin_id': binLocationData['bin_id'],
+                                    'route_id': mondayReferenceData['route_id'],
+                                    'collection_point_id': collectionPointId,
+                                  });
+                                });
+                              }
+                            }
+                          }
+                        }
+                      } catch (e) {
+                        // Handle any errors (e.g., network issues)
+                        print('Error fetching data: $e');
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
+      _startTruckRoute();
+    }
 
-      print('BinLocation saved data: $_binTrackLocations');
 
-      // Check if the truck is at a stop point
-      bool isStopPoint = _binTrackLocations.any((bin) =>
-      bin['latitude'] == currentPoint.latitude &&
-          bin['longitude'] == currentPoint.longitude);
+    double calculateBearing(LatLng start, LatLng end) {
+      double startLat = start.latitude * (math.pi / 180);
+      double startLng = start.longitude * (math.pi / 180);
+      double endLat = end.latitude * (math.pi / 180);
+      double endLng = end.longitude * (math.pi / 180);
 
-      if (isStopPoint) {
-        print("Updating database");
+      double deltaLng = endLng - startLng;
 
-        // Find the bin to update
-        var binToUpdate = _binTrackLocations.firstWhere(
-              (bin) =>
-          bin['latitude'] == currentPoint.latitude &&
-              bin['longitude'] == currentPoint.longitude,
-          orElse: () => <String, dynamic>{}, // Return an empty map if not found
-        );
+      double x = math.sin(deltaLng) * math.cos(endLat);
+      double y = math.cos(startLat) * math.sin(endLat) -
+          math.sin(startLat) * math.cos(endLat) * math.cos(deltaLng);
 
-        await Future.delayed(const Duration(seconds: 3)); // Stop for 40 seconds
+      double bearing = math.atan2(x, y) * (180 / math.pi);
+      return (bearing + 360) % 360; // Normalize to 0-360 degrees
+    }
 
-        if (binToUpdate.isNotEmpty) {
-          var binId = binToUpdate['bin_id'];
-          var routeId = binToUpdate['route_id'];
-          var collectionPointId = binToUpdate['collection_point_id'];
+    /// Calculates the shortest angle for smooth rotation
+    double shortestAngle(double from, double to) {
+      double difference = (to - from + 360) % 360;
+      if (difference > 180) {
+        difference -= 360;
+      }
+      return difference;
+    }
 
-          // Update truck status to "empty"
-          await _truckService.updateTruckDetails(
-            truckId: truckId,
-            binId: binId,
-            routeId: routeId,
-            collectionPointId: collectionPointId,
-            updatedData: {"status": "Empty"},
+
+    void _animateTruckMovement(String truckId, List<LatLng> route) async {
+      BitmapDescriptor truckIcon = await _getTruckIcon();
+
+      print('Route Length: ${route.length}');
+
+      for (int i = 0; i < route.length; i++) {
+        LatLng currentPoint = route[i];
+        LatLng? nextPoint = i < route.length - 1 ? route[i + 1] : null;
+        double? bearing = nextPoint != null ? calculateBearing(currentPoint, nextPoint) : null;
+        // Ensure that widget is still mounted before doing anything
+        if (!mounted) return; // Exit if widget is disposed
+
+        // // Adjust bearing for alignment
+        // double adjustedBearing = (bearing ?? 0) + 20 % 360;
+        double adjustedBearing = (bearing ?? 0);
+
+        // Check if the marker with truckId exists in the _markers set
+        print('Checking if marker exists for truckId: $truckId');
+        bool markerExists = _markers.any((marker) => marker.markerId.value == truckId);
+        print('Marker exists: $markerExists');
+
+        if (mounted) {
+          setState(() {
+            _isLoading = false; // Set loading to false once data is loaded
+            // Only update if the marker exists
+            if (markerExists) {
+              print('Updating marker: $truckId with icon and position');
+              _markers = _markers.map((marker) {
+                if (marker.markerId.value == truckId) {
+                  double currentBearing = marker.rotation;
+                  double targetBearing = adjustedBearing;
+
+                  // Calculate smoothed bearing
+                  double smoothedBearing = currentBearing +
+                      shortestAngle(currentBearing, targetBearing) * 0.05; // Adjust smoothness factor
+                  return marker.copyWith(
+                    positionParam: currentPoint,
+                    iconParam: truckIcon,
+                    rotationParam: smoothedBearing,
+                  );
+                }
+                return marker;
+              }).toSet();
+            } else {
+              print('Marker not found, adding a new marker: $truckId');
+              _markers.add(
+                Marker(
+                  markerId: MarkerId(truckId),
+                  position: currentPoint,
+                  icon: truckIcon,
+                  rotation: adjustedBearing,
+                  anchor: const Offset(0.5, 0.5),
+                ),
+              );
+            }
+          });
+        }
+
+        // Animate camera for every 3rd point to reduce jitter
+        if (i % 3 == 0) {
+          googleMapController.animateCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: currentPoint,
+                zoom: 17, // Adjust zoom level as needed
+                bearing: bearing ?? 0, // Rotate the camera to align with the truck's heading
+                tilt: 45, // Tilt for a 3D perspective
+              ),
+            ),
           );
         }
-      } else {
-        await Future.delayed(const Duration(seconds: 1)); // Simulate movement delay
+
+        print('BinLocation saved data: $_binTrackLocations');
+
+        // Check if the truck is at a stop point
+        bool isStopPoint = _binTrackLocations.any((bin) =>
+        bin['latitude'] == currentPoint.latitude &&
+            bin['longitude'] == currentPoint.longitude);
+
+        if (isStopPoint) {
+          print("Updating database");
+
+          // Find the bin to update
+          var binToUpdate = _binTrackLocations.firstWhere(
+                (bin) =>
+            bin['latitude'] == currentPoint.latitude &&
+                bin['longitude'] == currentPoint.longitude,
+            orElse: () => <String, dynamic>{}, // Return an empty map if not found
+          );
+
+          await Future.delayed(const Duration(seconds: 3)); // Stop for 40 seconds
+
+          if (binToUpdate.isNotEmpty) {
+            var binId = binToUpdate['bin_id'];
+            var routeId = binToUpdate['route_id'];
+            var collectionPointId = binToUpdate['collection_point_id'];
+
+            // Update truck status to "empty"
+            await _truckService.updateTruckDetails(
+              truckId: truckId,
+              binId: binId,
+              routeId: routeId,
+              collectionPointId: collectionPointId,
+              updatedData: {"status": "Empty"},
+            );
+          }
+        } else {
+          await Future.delayed(const Duration(seconds: 1)); // Simulate movement delay
+        }
+      }
+
+      // Handle the last point
+      print("Reached last point: ${route.last}");
+    }
+
+    void _startTruckRoute() async {
+
+      for (var truckRoute in _truckRoutes) {
+        String truckId = truckRoute['id'];
+        List<LatLng> route = truckRoute['route'];
+        print("Loaded truck: $truckRoute");
+        _animateTruckMovement(truckId, route);
       }
     }
 
-    // Handle the last point
-    print("Reached last point: ${route.last}");
-  }
+    Future<BitmapDescriptor> _getTruckIcon() async {
+      return await BitmapDescriptor.asset(
+        ImageConfiguration(size: Size(60, 60)), // Set an appropriate size for the icon
+        'assets/images/truck1.png', // Make sure the file exists in your assets
+      );
+    }
 
-  void _startTruckRoute() async {
-
-    for (var truckRoute in _truckRoutes) {
-      String truckId = truckRoute['id'];
-      List<LatLng> route = truckRoute['route'];
-      print("Loaded truck: $truckRoute");
-      _animateTruckMovement(truckId, route);
+  //   @override
+  //   Widget build(BuildContext context) {
+  //     return Scaffold(
+  //       appBar: AppBar(
+  //         title: Text(wardName),
+  //         backgroundColor: Colors.green,
+  //       ),
+  //       body: GoogleMap(
+  //         initialCameraPosition: CameraPosition(
+  //           target: _defaultCenter,
+  //           zoom: 17,
+  //         ),
+  //         markers: _markers,
+  //         polygons: polygons,
+  //         onMapCreated: (controller) {
+  //           googleMapController = controller;
+  //           if (_isStyleLoaded) {
+  //             googleMapController.setMapStyle(_mapStyle);
+  //           }
+  //         },
+  //       ),
+  //
+  //     );
+  //   }
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(wardName),
+          backgroundColor: Colors.green,
+        ),
+        body: Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: _defaultCenter,
+                zoom: 17,
+              ),
+              markers: _markers,
+              polygons: polygons,
+              onMapCreated: (controller) {
+                googleMapController = controller;
+                if (_isStyleLoaded) {
+                  googleMapController.setMapStyle(_mapStyle);
+                }
+              },
+            ),
+            if (_isLoading)
+              Center(
+                child: CircularProgressIndicator(), // Loading spinner
+              ),
+          ],
+        ),
+      );
     }
   }
 
-  Future<BitmapDescriptor> _getTruckIcon() async {
-    return await BitmapDescriptor.asset(
-      ImageConfiguration(size: Size(60, 60)), // Set an appropriate size for the icon
-      'assets/images/truck1.png', // Make sure the file exists in your assets
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(wardName),
-        backgroundColor: Colors.green,
-      ),
-      body: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: _defaultCenter,
-          zoom: 17,
-        ),
-        markers: _markers,
-        polygons: polygons,
-        onMapCreated: (controller) {
-          googleMapController = controller;
-          if (_isStyleLoaded) {
-            googleMapController.setMapStyle(_mapStyle);
-          }
-        },
-      ),
-    );
-  }
-}
 
 
